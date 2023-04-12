@@ -24,12 +24,14 @@ public class PluginUI : Window, IDisposable {
 
   private readonly AboutSection aboutSection;
   private readonly HousingSection housingSection;
+  private readonly HeliosphereFontLoadingTestSection heliosphereFontLoadingTestSection;
 
   public PluginUI() : base(Name, WindowFlags) {
     Size = new Vector2(630, 500) * ImGuiHelpers.GlobalScale;
     SizeCondition = ImGuiCond.Always;
     aboutSection = new AboutSection();
     housingSection = new HousingSection();
+    heliosphereFontLoadingTestSection = new HeliosphereFontLoadingTestSection();
   }
 
   public void Dispose() {
@@ -43,6 +45,7 @@ public class PluginUI : Window, IDisposable {
     if (!_isDisposed && disposing) {
       aboutSection.Dispose();
       housingSection.Dispose();
+      heliosphereFontLoadingTestSection.Dispose();
       _isDisposed = true;
     }
   }
@@ -56,6 +59,11 @@ public class PluginUI : Window, IDisposable {
 
       if (ImGui.BeginTabItem(housingSection.Name)) {
         housingSection.Draw();
+        ImGui.EndTabItem();
+      }
+
+      if (ImGui.BeginTabItem(heliosphereFontLoadingTestSection.Name)) {
+        heliosphereFontLoadingTestSection.Draw();
         ImGui.EndTabItem();
       }
       ImGui.EndTabBar();
