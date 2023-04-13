@@ -1,10 +1,4 @@
-2023-04-12 16:51:09.957 -07:00 [INF] [SoupCatUtils2] Loading Get 1
-2023-04-12 16:51:09.957 -07:00 [INF] [SoupCatUtils2] Loading Get 2
-2023-04-12 16:51:09.957 -07:00 [INF] [SoupCatUtils2] Loading New 1
 2023-04-12 16:51:09.957 -07:00 [INF] [GameFontManager] NewFontRef: Queueing RebuildFonts because GameFontStyle(Axis36, 27pt, skew=0, weight=0) has been requested.
-2023-04-12 16:51:09.958 -07:00 [INF] [SoupCatUtils2] Loading New 2
-2023-04-12 16:51:09.958 -07:00 [INF] [SoupCatUtils2] Loading New 3
-2023-04-12 16:51:09.958 -07:00 [INF] [SoupCatUtils2] Loading Get 3
 2023-04-12 16:51:09.958 -07:00 [INF] [SoupCatUtils2] Available: False
 2023-04-12 16:51:09.958 -07:00 [INF] [SoupCatUtils2] handle != null: True
 2023-04-12 16:51:09.958 -07:00 [INF] [SoupCatUtils2] handle: Dalamud.Interface.GameFonts.GameFontHandle
