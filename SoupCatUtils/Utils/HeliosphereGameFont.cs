@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Dalamud.Interface.GameFonts;
 using Dalamud.Logging;
@@ -40,27 +41,42 @@ class HeliosphereGameFont : IDisposable {
 
   internal GameFontHandle? this[uint size, bool italic] {
     get {
-      PluginLog.Information("Loading Get 1");
       GameFontHandle handle;
-      PluginLog.Information("Loading Get 2");
       if (_fonts.ContainsKey((size, italic))) {
-        PluginLog.Information("Loading Old 1");
         handle = _fonts[(size, italic)];
-        PluginLog.Information("Loading Old 2");
       } else {
-        PluginLog.Information("Loading New 1");
         handle = Services.PluginInterface.UiBuilder.GetGameFontHandle(new GameFontStyle(GameFontFamily.Axis, size) {
           Italic = italic,
         });
-        PluginLog.Information("Loading New 2");
         _fonts.Add((size, italic), handle);
-        PluginLog.Information("Loading New 3");
       }
-      PluginLog.Information("Loading Get 3");
+
+      #region Debugging
       PluginLog.Information($"Available: {handle.Available}");
       PluginLog.Information($"handle != null: {handle != null}");
       PluginLog.Information($"handle: {handle}");
       PluginLog.Information($"return: {(handle != null && handle.Available ? "handle" : "null")}");
+      PluginLog.Information($"_fonts.Keys.Count: {_fonts.Keys.Count}");
+      PluginLog.Information($"_fonts.Count: {_fonts.Count}");
+      try {
+        PluginLog.Information($"_fonts.Keys[0]: ({_fonts.Keys.ElementAt(0).Item1}, {_fonts.Keys.ElementAt(0).Item2})");
+      } catch {
+        PluginLog.Information($"_fonts.Keys[0]: Failed!");
+      }
+      try {
+        PluginLog.Information($"_fonts[0]: {_fonts[_fonts.Keys.ElementAt(0)]}");
+      } catch {
+        PluginLog.Information($"_fonts[0]: Failed!");
+      }
+      PluginLog.Information($"_fonts[0] != null: {_fonts[_fonts.Keys.ElementAt(0)] != null}");
+      try {
+        if (_fonts[_fonts.Keys.ElementAt(0)] != null) {
+          PluginLog.Information($"_fonts[0].Available: {_fonts[_fonts.Keys.ElementAt(0)].Available}");
+        }
+      } catch {
+        PluginLog.Information($"_fonts[0].Available: Failed!");
+      }
+      #endregion
 
       return handle.Available ? handle : null;
     }

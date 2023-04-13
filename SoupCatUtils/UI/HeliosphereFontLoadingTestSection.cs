@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Dalamud.Interface;
+using Dalamud.Logging;
 
 using ImGuiNET;
 
@@ -41,7 +42,10 @@ internal class HeliosphereFontLoadingTestSection : SectionBase, IDisposable {
     var widthAvail = ImGui.GetContentRegionAvail().X;
     var titleFont = size == 0 ? null : GameFont[size];
     if (titleFont != null) {
+      PluginLog.Information("Drawing Font");
       ImGui.PushFont(titleFont.ImFont);
+    } else {
+      PluginLog.Information("Not Drawing Font");
     }
 
     var textSize = ImGui.CalcTextSize(text);
@@ -55,7 +59,10 @@ internal class HeliosphereFontLoadingTestSection : SectionBase, IDisposable {
     ImGui.TextUnformatted(text);
 
     if (titleFont != null) {
+      PluginLog.Information("No Longer Drawing Font");
       ImGui.PopFont();
+    } else {
+      PluginLog.Information("Not No Longer Drawing Font");
     }
   }
 
