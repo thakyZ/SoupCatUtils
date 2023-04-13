@@ -1,12 +1,19 @@
-2023-04-12 16:21:10.674 -07:00 [INF] [SoupCatUtils2] Loading Get 1
-2023-04-12 16:21:10.674 -07:00 [INF] [SoupCatUtils2] Loading Get 2
-2023-04-12 16:21:10.674 -07:00 [INF] [SoupCatUtils2] Loading New 1
-2023-04-12 16:21:10.674 -07:00 [INF] [GameFontManager] NewFontRef: Queueing RebuildFonts because GameFontStyle(Axis36, 27pt, skew=0, weight=0) has been requested.
-2023-04-12 16:21:10.674 -07:00 [INF] [SoupCatUtils2] Loading New 2
-2023-04-12 16:21:10.674 -07:00 [INF] [SoupCatUtils2] Loading New 3
-2023-04-12 16:21:10.674 -07:00 [INF] [SoupCatUtils2] Loading Get 3
-2023-04-12 16:21:10.674 -07:00 [INF] [SoupCatUtils2] Available: False
-2023-04-12 16:21:10.674 -07:00 [INF] [SoupCatUtils2] handle != null: True
-2023-04-12 16:21:10.674 -07:00 [INF] [SoupCatUtils2] handle: Dalamud.Interface.GameFonts.GameFontHandle
-2023-04-12 16:21:10.674 -07:00 [INF] [SoupCatUtils2] return: null
-2023-04-12 16:21:10.698 -07:00 [INF] [GameFontManager] NewFontRef: Queueing RebuildFonts because GameFontStyle(Axis12, 12pt, skew=3, weight=0) has been requested.
+2023-04-12 16:51:09.957 -07:00 [INF] [SoupCatUtils2] Loading Get 1
+2023-04-12 16:51:09.957 -07:00 [INF] [SoupCatUtils2] Loading Get 2
+2023-04-12 16:51:09.957 -07:00 [INF] [SoupCatUtils2] Loading New 1
+2023-04-12 16:51:09.957 -07:00 [INF] [GameFontManager] NewFontRef: Queueing RebuildFonts because GameFontStyle(Axis36, 27pt, skew=0, weight=0) has been requested.
+2023-04-12 16:51:09.958 -07:00 [INF] [SoupCatUtils2] Loading New 2
+2023-04-12 16:51:09.958 -07:00 [INF] [SoupCatUtils2] Loading New 3
+2023-04-12 16:51:09.958 -07:00 [INF] [SoupCatUtils2] Loading Get 3
+2023-04-12 16:51:09.958 -07:00 [INF] [SoupCatUtils2] Available: False
+2023-04-12 16:51:09.958 -07:00 [INF] [SoupCatUtils2] handle != null: True
+2023-04-12 16:51:09.958 -07:00 [INF] [SoupCatUtils2] handle: Dalamud.Interface.GameFonts.GameFontHandle
+2023-04-12 16:51:09.958 -07:00 [INF] [SoupCatUtils2] return: null
+2023-04-12 16:51:09.958 -07:00 [INF] [SoupCatUtils2] _fonts.Keys.Count: 1
+2023-04-12 16:51:09.958 -07:00 [INF] [SoupCatUtils2] _fonts.Count: 1
+2023-04-12 16:51:09.960 -07:00 [INF] [SoupCatUtils2] _fonts.Keys[0]: (36, False)
+2023-04-12 16:51:09.960 -07:00 [INF] [SoupCatUtils2] _fonts[0]: Dalamud.Interface.GameFonts.GameFontHandle
+2023-04-12 16:51:09.960 -07:00 [INF] [SoupCatUtils2] _fonts[0] != null: True
+2023-04-12 16:51:09.960 -07:00 [INF] [SoupCatUtils2] _fonts[0].Available: False
+2023-04-12 16:51:09.960 -07:00 [INF] [SoupCatUtils2] Not Drawing Font
+2023-04-12 16:51:09.960 -07:00 [INF] [SoupCatUtils2] Not No Longer Drawing Font
