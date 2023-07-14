@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Dalamud.Interface;
 using Dalamud.Interface.Windowing;
@@ -11,11 +11,11 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
 
 public class AboutSection : SectionBase, IDisposable {
   public new string Name { get; set; } = "About##SoupCatUtils";
-  protected override string NameImpl {
+  protected override string NameImplementation {
     get { return Name; }
   }
 
-  public void Dispose() {
+  public new void Dispose() {
     Dispose(true);
     GC.SuppressFinalize(this);
   }

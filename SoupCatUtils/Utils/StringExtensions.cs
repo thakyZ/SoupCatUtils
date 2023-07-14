@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -67,4 +67,14 @@ public static partial class StringExtensions {
       .Select(w => upperCaseInside.Replace(w, m => m.Value.ToLower())).Select((w, i) => i == 0 ? startsWithUpperCaseChar.Replace(w, m => m.Value.ToLower()) : w); // set first letter to lowercase
     return string.Concat(camelCase).Trim();
   }
+
+	public static IEnumerable<String> SplitInParts(this String s, Int32 partLength)
+	{
+		if (s == null)
+			throw new ArgumentNullException(nameof(s));
+		if (partLength <= 0)
+			throw new ArgumentException("Part length has to be positive.", nameof(partLength));
+		for (var i = 0; i < s.Length; i += partLength)
+			yield return s.Substring(i, Math.Min(partLength, s.Length - i));
+	}
 }

@@ -1,11 +1,14 @@
-﻿using System;
+using System;
 
 using Dalamud.Game.Command;
-using Dalamud.Interface.GameFonts;
 using Dalamud.Interface.Windowing;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 
+using ECommons;
+using ECommons.Schedulers;
+
+using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Modules;
 using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils;
@@ -13,12 +16,12 @@ public class Plugin : IDalamudPlugin {
   /// <summary>
   /// The private internal instance for the name of the plugin
   /// </summary>
-  public const string StaticName = "Soup Cat Utils";
+  public const string StaticName = "$(Title)";
 
   /// <summary>
   /// The private internal instance for the name of the plugin
   /// </summary>
-  public const string StaticAuthor = "Neko Boi Nick";
+  public const string StaticAuthor = "$(Authors)";
 
   /// <summary>
   /// The name of the plugin
@@ -38,10 +41,11 @@ public class Plugin : IDalamudPlugin {
   public Plugin([RequiredVersion("1.0")] DalamudPluginInterface pluginInterface) {
     Services.Initialize(pluginInterface);
 
-    Services.PluginConfig = Services.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
-    Services.PluginConfig.Initialize(Services.PluginInterface);
-
     Services.PluginInstance = this;
+
+    ECommonsMain.Init(Services.PluginInterface, Services.PluginInstance, Module.SplatoonAPI);
+
+    Services.PluginConfig = Services.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
     Services.FontContainer = new FontContainer();
 
     Services.UI = new PluginUI();
@@ -56,6 +60,11 @@ public class Plugin : IDalamudPlugin {
     Services.PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
 
     Services.Tools.Housing = new Tools.Housing();
+
+    _ = new TickScheduler(delegate {
+      Services.FanDanceIV_DebugState = new();
+      Services.FanDanceIV_Module = new();
+    });
   }
 
   public void Dispose() {
@@ -67,18 +76,19 @@ public class Plugin : IDalamudPlugin {
 
   protected virtual void Dispose(bool disposing) {
     if (!_isDisposed && disposing) {
+      Services.PluginConfig.Save();
       WindowSystem.RemoveAllWindows();
       Services.PluginInterface.UiBuilder.Draw -= DrawUI;
       Services.PluginInterface.UiBuilder.OpenConfigUi -= DrawConfigUI;
       Services.CommandManager.RemoveHandler(CommandName);
       Services.DisposeProxy();
+      ECommonsMain.Dispose();
       _isDisposed = true;
     }
   }
 
   private void OnCommand(string command, string args) {
     Services.UI.IsOpen ^= true;
-    // in response to the slash command, just display our main ui
   }
 
   private void DrawUI() {

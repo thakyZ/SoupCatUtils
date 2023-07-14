@@ -18,11 +18,11 @@ using static Dalamud.Interface.GameFonts.GameFontLayoutPlan;
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
 public class HousingSection : SectionBase, IDisposable {
   public new string Name { get; set; } = "Housing##SoupCatUtils";
-  protected override string NameImpl {
+  protected override string NameImplementation {
     get { return Name; }
   }
 
-  public void Dispose() {
+  public new void Dispose() {
     Dispose(true);
     GC.SuppressFinalize(this);
   }

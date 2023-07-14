@@ -62,16 +62,16 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <AssemblyName>$(MSBuildProjectName)2</AssemblyName>
     <Optimize>False</Optimize>
-    <OutputPath>$(AppData)\XIVLauncher\devPlugins\$(MSBuildProjectName)\</OutputPath>
-    <BaseOutputPath>$(AppData)\XIVLauncher\devPlugins\$(MSBuildProjectName)\</BaseOutputPath>
+    <OutputPath>$(DalamudDevPlugins)\$(MSBuildProjectName)\</OutputPath>
+    <BaseOutputPath>$(DalamudDevPlugins)\$(MSBuildProjectName)\</BaseOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>Full</DebugType>
     <ErrorReport>Prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <BuildDependsOn>
+    <!--<BuildDependsOn>
       $(BuildDependsOn);
       PostBuild-ILRepack
-    </BuildDependsOn>
+    </BuildDependsOn>-->
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -85,6 +85,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)lib\ECommons\ECommons\ECommons.csproj" />
     <!-- These are used for the tasks in the target called "PackagePlugin" -->
     <PackageReference Include="DalamudPackager" Version="2.1.11" />
     <!-- These are used for the tasks in the target called "PostBuild-ILRepack" -->
@@ -215,10 +216,19 @@
       <InputAssemblies Include="$(TargetPath)" />
       <InputAssemblies Include="$(TargetDir)*.dll" Exclude="$(TargetPath)" />
     </ItemGroup>
-    <Exec Command="$(PkgILRepack)\tools\ILRepack.exe /union /lib:$(DalamudLibPath) /out:$(TargetDir)$(TargetFileName) @(InputAssemblies, ' ')" />
+    <ItemGroup>
+      <InputLibraries Include="$(DalamudLibPath)" />
+      <InputLibraries Include="$(NetCoreTargetingPackRoot.Replace('Program Files', 'Progra~1'))\Microsoft.NETCore.App.Ref\$(BundledNETCoreAppPackageVersion)\ref\net$(BundledNETCoreAppTargetFrameworkVersion)\" />
+    </ItemGroup>
+    <Exec Command="$(PkgILRepack)\tools\ILRepack.exe /union /lib:@(InputLibraries, ' /lib:') /out:$(TargetDir)$(TargetFileName) @(InputAssemblies, ' ')" />
     <ItemGroup>
       <CleanAssemblies Include="$(TargetDir)*.dll" Exclude="$(TargetDir)$(TargetFileName)" />
     </ItemGroup>
     <Delete Files="@(CleanAssemblies)" />
+  </Target>
+
+  <!-- Reset what was done during the PreBuild Task -->
+  <Target Name="Reset-PreBuildTasks" AfterTargets="PostBuild-ILRepack">
+    <Move SourceFiles="$(ProjectDir)Plugin.bak.cs" DestinationFiles="$(ProjectDir)Plugin.cs" />
   </Target>
 </Project>

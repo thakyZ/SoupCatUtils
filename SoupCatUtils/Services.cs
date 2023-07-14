@@ -1,34 +1,22 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-using Dalamud.Data;
-using Dalamud.Game;
-using Dalamud.Game.ClientState;
-using Dalamud.Game.ClientState.Objects;
-using Dalamud.Game.Command;
-using Dalamud.Game.Gui;
-using Dalamud.Game.Network;
-using Dalamud.IoC;
-using Dalamud.Logging;
-using Dalamud.Plugin;
-
-using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Tools;
-using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
+using System;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils;
 public class Services : IDisposable {
-  private static Services servicesInstance { get; set; } = null!;
-  public static void Initialize(DalamudPluginInterface pluginInterface) {
+  internal static Services servicesInstance { get; set; } = null!;
+  internal static void Initialize(DalamudPluginInterface pluginInterface) {
     servicesInstance = pluginInterface.Create<Services>() ?? throw new ArgumentNullException(nameof(pluginInterface));
   }
 
-  public static Plugin PluginInstance { get; set; } = null!;
-  public static Configuration PluginConfig { get; set; } = null!;
-  public static class Tools {
+  internal static Plugin PluginInstance { get; set; } = null!;
+  internal static Configuration PluginConfig { get; set; } = null!;
+  internal static class Tools {
     public static Housing Housing { get; set; } = null!;
   }
-  public static PluginUI UI { get; set; } = null!;
-  public static FontContainer FontContainer { get; set; } = null!;
+  internal static PluginUI UI { get; set; } = null!;
+  internal static FontContainer FontContainer { get; set; } = null!;
+
+  internal static DebugState FanDanceIV_DebugState { get; set; } = null!;
+  internal static FanDanceIV_Module FanDanceIV_Module { get; set; } = null!;
 
   [PluginService][RequiredVersion("1.0")][AllowNull, NotNull] public static ClientState ClientState { get; private set; }
   [PluginService][RequiredVersion("1.0")][AllowNull, NotNull] public static CommandManager CommandManager { get; private set; }
@@ -39,6 +27,7 @@ public class Services : IDisposable {
   [PluginService][RequiredVersion("1.0")][AllowNull, NotNull] public static DataManager DataManager { get; private set; }
   [PluginService][RequiredVersion("1.0")][AllowNull, NotNull] public static ObjectTable ObjectTable { get; private set; }
   [PluginService][RequiredVersion("1.0")][AllowNull, NotNull] public static SigScanner SigScanner { get; private set; }
+  [PluginService][RequiredVersion("1.0")][AllowNull, NotNull] public static TargetManager TargetManager { get; private set; }
 
   public static void DisposeProxy() {
     servicesInstance.Dispose();

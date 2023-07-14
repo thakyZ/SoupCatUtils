@@ -1,4 +1,6 @@
-﻿using System;
+// Ignore Spelling: Splatoon
+
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 using Dalamud.Configuration;
@@ -12,13 +14,9 @@ public class Configuration : IPluginConfiguration {
 
   // the below exist just to make saving less cumbersome
 
-  [NonSerialized][AllowNull, NotNull] private DalamudPluginInterface pluginInterface;
-
-  public void Initialize(DalamudPluginInterface pluginInterface) {
-    this.pluginInterface = pluginInterface;
-  }
+  public bool SplatoonFanDanceIV { get; set; }
 
   public void Save() {
-    pluginInterface.SavePluginConfig(this);
+    Services.PluginInterface.SavePluginConfig(this);
   }
 }

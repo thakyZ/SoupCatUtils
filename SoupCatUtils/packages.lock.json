@@ -19,6 +19,9 @@
         "requested": "[1.5.0.235, )",
         "resolved": "1.5.0.235",
         "contentHash": "pP/oxACREn0tIf8s05FLu9FuZoGRuztYHjy6HntPkhuwQ/dY62ZVlENuKNhUcUaNaSmM2QyR4Vi2Dt4eTqByRg=="
+      },
+      "ecommons": {
+        "type": "Project"
       }
     }
   }

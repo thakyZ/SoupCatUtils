@@ -15,10 +15,14 @@ using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
 
 public abstract class SectionBase {
-  public string Name { get { return NameImpl; } }
-  protected abstract string NameImpl { get; }
+  public string Name { get { return NameImplementation; } }
+  protected abstract string NameImplementation { get; }
 
   public virtual void Draw() { }
+
+  public virtual void Dispose() {}
+
+  public virtual void FrameWorkUpdate() { }
 
   public static void CreateTitle(string h1, string h2 = "", string h3 = "") {
     float baseCursorPos = ImGui.GetCursorPosY();
