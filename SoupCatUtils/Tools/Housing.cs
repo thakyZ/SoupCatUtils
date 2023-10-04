@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -161,7 +161,7 @@ public class Housing {
         };
         dataRow["index"] = index;
         dataRow["district"] = districtName;
-        dataRow["plot_num"] = plotNumber;
+        dataRow["plot_num"] = plotNumber + 1;
         dataRow["size"] = houseSizeName;
         dataRow["price"] = housePriceMillions;
         dataTable.Rows.Add(dataRow);

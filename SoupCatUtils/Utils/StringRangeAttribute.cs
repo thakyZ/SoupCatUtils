@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,34 +12,33 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
 
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 public class StringRangeAttribute : ValidationAttribute {
-  public string[] AllowableValues { get; set; }
+  public List<string> AllowableValues { get; set; } = new();
 
   public StringRangeAttribute(params string[] allowableValues) {
-    AllowableValues = allowableValues;
+    AllowableValues.AddRange(allowableValues);
   }
 
   public StringRangeAttribute(int min, int max, params string[] allowableValues) {
-    AllowableValues = allowableValues;
+    AllowableValues.AddRange(allowableValues);
     for (int i = min; i <= max; i++) {
-      AllowableValues[allowableValues.Length + (i - 1)] = $"{i}";
+      AllowableValues.Add($"{i}");
     }
   }
 
   public StringRangeAttribute(Type type, params string[] allowableValues) {
-    AllowableValues = allowableValues;
+    AllowableValues.AddRange(allowableValues);
     int lastIndex = allowableValues.Length;
     foreach (object item in Enum.GetValues(type)) {
-      AllowableValues[lastIndex] = ((Enum)item).ToDescriptionString();
-      lastIndex++;
+      AllowableValues.Add(((Enum)item).ToDescriptionString());
     }
   }
 
   protected override ValidationResult IsValid(object? value, ValidationContext validationContext) {
-    if (AllowableValues?.Contains(value?.ToString()) == true) {
+    if (AllowableValues?.Contains(value?.ToString() ?? "null") == true) {
       return ValidationResult.Success!;
     }
 
-    string msg = $"Please enter one of the allowable values: {string.Join(", ", AllowableValues ?? new string[] { "No allowable values found" })}.";
+    string msg = $"Please enter one of the allowable values: {string.Join(", ", AllowableValues ?? new() { "No allowable values found" })}.";
     return new ValidationResult(msg);
   }
 }

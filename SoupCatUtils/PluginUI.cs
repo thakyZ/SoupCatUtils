@@ -32,7 +32,8 @@ public class PluginUI : Window, IDisposable {
     Sections = new() {
       new AboutSection(),
       new HousingSection(),
-      new SPLSection()
+      new SPLSection(),
+      new TweaksSection()
     };
   }
 
@@ -48,7 +49,7 @@ public class PluginUI : Window, IDisposable {
 
   private bool _isDisposed;
 
-  protected virtual void Dispose(bool disposing) {
+  protected void Dispose(bool disposing) {
     if (!_isDisposed && disposing) {
       foreach (SectionBase section in Sections) {
         section.Dispose();

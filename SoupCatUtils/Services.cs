@@ -1,4 +1,19 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
+
+using Dalamud.Data;
+using Dalamud.Game;
+using Dalamud.Game.ClientState;
+using Dalamud.Game.ClientState.Objects;
+using Dalamud.Game.Command;
+using Dalamud.Game.Gui;
+using Dalamud.Game.Network;
+using Dalamud.IoC;
+using Dalamud.Plugin;
+
+using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Modules;
+using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Tools;
+using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils;
 public class Services : IDisposable {

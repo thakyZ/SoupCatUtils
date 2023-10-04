@@ -15,17 +15,7 @@ public class AboutSection : SectionBase, IDisposable {
     get { return Name; }
   }
 
-  public new void Dispose() {
-    Dispose(true);
-    GC.SuppressFinalize(this);
-  }
-
-  private bool _isDisposed = false;
-
-  protected virtual void Dispose(bool disposing) {
-    if (!_isDisposed && disposing) {
-      _isDisposed = true;
-    }
+  protected override void DisposeImpl() {
   }
 
   public override void Draw() {

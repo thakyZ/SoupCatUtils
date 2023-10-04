@@ -1,29 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
+using System.Drawing;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
+using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
-using static System.Net.Mime.MediaTypeNames;
+using Dalamud.Logging;
+
+using static NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI.HousingSection;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
 public static partial class StringExtensions {
-  public static IEnumerable<string> GetRange(this string val) {
-    if (val.GetType().GetField(val)!.GetCustomAttributes(typeof(StringRangeAttribute), false) is not StringRangeAttribute[] attributes) {
-      return new List<string>();
-    } else if (attributes.Length > 0) {
-      return attributes[0].AllowableValues.ToList();
-    } else {
-      return new List<string>();
-    }
-  }
-
   public static string ToSnakeCase(this string text) {
     text = Regex.Replace(text, @"[^A-Z\sa-z0-9]", "");
     text = Regex.Replace(text, @"\s(?=[a-z0-9])", "_");

@@ -1,4 +1,6 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 using Dalamud.Game.Command;
 using Dalamud.Interface.Windowing;
@@ -10,6 +12,8 @@ using ECommons.Schedulers;
 
 using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Modules;
 using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
+
+using Module = ECommons.Module;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils;
 public class Plugin : IDalamudPlugin {
@@ -36,7 +40,7 @@ public class Plugin : IDalamudPlugin {
   /// <summary>
   /// The window system of the plugin.
   /// </summary>
-  internal WindowSystem WindowSystem = new(StaticName.Replace(" ",String.Empty));
+  internal WindowSystem WindowSystem = new(StaticName.Replace(" ",string.Empty));
 
   public Plugin([RequiredVersion("1.0")] DalamudPluginInterface pluginInterface) {
     Services.Initialize(pluginInterface);

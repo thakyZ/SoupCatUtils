@@ -1,19 +1,17 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
-using System.Reflection.Emit;
+using System.Reflection;
+using System.Text;
 
-using Dalamud.Interface;
-using Dalamud.Interface.Windowing;
-
-using FFXIVClientStructs.FFXIV.Common.Math;
+using Dalamud.Logging;
 
 using ImGuiNET;
 
 using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Tools;
 using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
-
-using static Dalamud.Interface.GameFonts.GameFontLayoutPlan;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
 public class HousingSection : SectionBase, IDisposable {
@@ -29,7 +27,7 @@ public class HousingSection : SectionBase, IDisposable {
 
   private bool _isDisposed;
 
-  protected virtual void Dispose(bool disposing) {
+  protected new void Dispose(bool disposing) {
     if (!_isDisposed && disposing) {
       _isDisposed = true;
     }
@@ -58,83 +56,159 @@ public class HousingSection : SectionBase, IDisposable {
     ImGui.TableSetupColumn("Price Mil", ImGuiTableColumnFlags.WidthStretch);
     ImGui.TableHeadersRow();
   }
+  public bool TestRow(DataRow row) {
+    bool output = false;
+    if (DataFilter.districtDataFilter != "None") {
+      if ((string)row["district"] != DataFilter.districtDataFilter) {
+        output |= true;
+      }
+    }
+    if (DataFilter.plotDataFilter != "None") {
+      if ((int)row["plot_num"] != DataFilter.plotSelect) {
+        output |= true;
+      }
+    }
+    if (DataFilter.sizeDataFilter != "None") {
+      if ((string)row["size"] != DataFilter.sizeDataFilter) {
+        output |= true;
+      }
+    }
+    return !output;
+  }
 
   public void DrawTableData() {
     foreach (DataRow row in housingData!.Rows) {
-      ImGui.Text($"{(uint)row["index"]}");
-      ImGui.TableNextColumn();
-      ImGui.Text($"{(string)row["district"]}");
-      ImGui.TableNextColumn();
-      ImGui.Text($"{(int)row["plot_num"]}");
-      ImGui.TableNextColumn();
-      ImGui.Text($"{(string)row["size"]}");
-      ImGui.TableNextColumn();
-      ImGui.Text($"{(int)((float)row["price"] * 1000000):n0} \uE049");
-      ImGui.TableNextRow();
-      ImGui.TableNextColumn();
+      if (TestRow(row)) {
+        ImGui.Text($"{(uint)row["index"]}");
+        ImGui.TableNextColumn();
+        ImGui.Text($"{(string)row["district"]}");
+        ImGui.TableNextColumn();
+        ImGui.Text($"{(int)row["plot_num"]}");
+        ImGui.TableNextColumn();
+        ImGui.Text($"{(string)row["size"]}");
+        ImGui.TableNextColumn();
+        ImGui.Text($"{(int)((float)row["price"] * 1000000):n0} \uE049");
+        ImGui.TableNextRow();
+        ImGui.TableNextColumn();
+      }
     }
   }
 
-  [StringRange(typeof(TerritoryTypes), "None")]
-  private string districtDataFilter = "None";
-  [StringRange(1, 60, "None")]
-  private string plotDataFilter = "None";
-  private int plotSelect = 0;
-  [StringRange("None", "Small", "Medium", "Large")]
-  private string sizeDataFilter = "None";
+  public void DrawDataFilter(float itemSizes = 0.0f) {
+    ImGui.SetNextItemWidth(itemSizes);
+    if (ImGui.BeginCombo($"District##DataFilter", DataFilter.districtDataFilter)) {
+      foreach (var district in DataFilter.GetRange(nameof(DataFilter.districtDataFilter))) {
+        if (ImGui.Selectable($"{district}##district-DataFilter-{district.ToPascalCase()}", DataFilter.districtDataFilter == district)) {
+          DataFilter.districtDataFilter = district;
+        }
+      }
+
+      ImGui.EndCombo();
+    }
+
+    ImGui.SameLine();
+    ImGui.Separator();
+    ImGui.SameLine();
+
+    ImGui.SetNextItemWidth(itemSizes);
+    if (ImGui.InputText("Plot # ##DataFilter", ref DataFilter.plotDataFilter, 2, ImGuiInputTextFlags.CharsNoBlank | ImGuiInputTextFlags.CharsDecimal)) {
+      if (DataFilter.plotDataFilter == "0") {
+        DataFilter.plotDataFilter = "None";
+      }
+      if ($"{DataFilter.plotDataFilter}a" == "a") {
+        DataFilter.plotDataFilter = "None";
+      }
+      if (DataFilter.plotDataFilter == "None") {
+        DataFilter.plotSelect = 0;
+      } else {
+        if (int.TryParse(DataFilter.plotDataFilter, new CultureInfo("en-US"), out int attempted) && attempted >= 0 && attempted <= 60) {
+          DataFilter.plotSelect = attempted;
+        } else {
+          DataFilter.plotDataFilter = DataFilter.plotSelect.ToString() == "0" ? "None" : DataFilter.plotSelect.ToString();
+        }
+      }
+    }
+
+    ImGui.SameLine();
+    ImGui.Separator();
+    ImGui.SameLine();
+
+    ImGui.SetNextItemWidth(itemSizes);
+    if (ImGui.BeginCombo("Size##DataFilter", DataFilter.sizeDataFilter)) {
+      foreach (var size in DataFilter.GetRange(nameof(DataFilter.sizeDataFilter))) {
+        if (ImGui.Selectable($"{size}##size-DataFilter-{size.ToPascalCase()}", DataFilter.sizeDataFilter == size)) {
+          DataFilter.sizeDataFilter = size;
+        }
+      }
+
+      ImGui.EndCombo();
+    }
+  }
 
   public override void Draw() {
     CreateTitle("Housing Tools");
+
     ImGui.SameLine();
+
     if (ImGui.Button("Load Data##SoupCatUtils")) {
       LoadData();
     }
+
     ImGui.SameLine();
+
     if (ImGui.Button("Clear Data##SoupCatUtils")) {
       ClearData();
     }
-    /*if (ImGui.BeginCombo("District##DataFilter", districtDataFilter)) {
-      foreach (var district in districtDataFilter.GetRange()) {
-        if (!ImGui.Selectable($"{district}##district-DataFilter-{district.ToPascalCase()}", districtDataFilter == district)) {
-          continue;
-        }
 
-        districtDataFilter = district;
-      }
-
-      ImGui.EndCombo();
-    }
-    ImGui.SameLine();
-    var _plotSelect = plotSelect.ToString();
-    ImGui.BeginGroup();
-    ImGui.PushID("Plot # ##DataFilter");
-    const float button_size = GetFrameHeight();
-    ImGui.SetNextItemWidth(Math.Max(1.0f, ImGui.CalcItemWidth() - (button_size + style.ItemInnerSpacing.x) * 2));
-    if (ImGui.InputText("Plot # ##DataFilter", ref _plotSelect, 4)) {
-      if (plotSelect == 0) {
-        //ImGui.Get
-      }
-      foreach (var plot in plotDataFilter.GetRange()) {
-        if (!ImGui.Selectable($"{plot}##district-DataFilter-{plot.ToPascalCase()}", districtDataFilter == district)) {
-          continue;
-        }
-
-        districtDataFilter = district;
-      }
-
-      ImGui.EndCombo();
-    }
-    ImGui.SameLine();
-    if (ImGui.BeginCombo("Size##DataFilter", sizeDataFilter)) {
-
-    }
-    ImGui.SameLine();*/
-    ImGui.BeginTable("##SoupCatUtils-HousingDataFromLumina", 5, ImGuiTableFlags.ScrollY);
-    DrawTableHeaders();
     if (DataLoaded) {
-      ImGui.TableNextColumn();
-      DrawTableData();
+      if (ImGui.BeginChild("##DataFilter", new System.Numerics.Vector2(ImGui.GetWindowWidth() - (ImGui.GetStyle().WindowPadding.X * 2), 32.0f))) {
+        DrawDataFilter((ImGui.GetWindowWidth() - (ImGui.GetStyle().WindowPadding.X * 2)) / 4);
+        ImGui.EndChild();
+      }
     }
-    ImGui.EndTable();
+
+    if (ImGui.BeginTable("##SoupCatUtils-HousingDataFromLumina", 5, ImGuiTableFlags.ScrollY)) {
+      DrawTableHeaders();
+      if (DataLoaded) {
+        ImGui.TableNextColumn();
+        DrawTableData();
+      }
+      ImGui.EndTable();
+    }
+  }
+
+  protected override void DisposeImpl() {
+  }
+}
+
+internal static class DataFilter {
+
+  [StringRange(typeof(TerritoryTypes), "None")]
+  public static string districtDataFilter = "None";
+
+  [StringRange(1, 60, "None")]
+  public static string plotDataFilter = "None";
+
+  public static int plotSelect = 0;
+
+  [StringRange("None", "Small", "Medium", "Large")]
+  public static string sizeDataFilter = "None";
+
+  public static IEnumerable<string> GetRange(string fieldName) {
+    try {
+      var fields = typeof(DataFilter).GetFields();
+      var attributes = fields
+                    .Where(f => f.GetCustomAttribute(typeof(StringRangeAttribute)) != null && f.Name == fieldName)
+                    .Select(f => (f, (StringRangeAttribute)f.GetCustomAttribute(typeof(StringRangeAttribute))!));
+
+      if (attributes.ToList().Count == 0) {
+        return new List<string>() { $"Error: {fields.Length}" };
+      } else {
+        return attributes.First().Item2.AllowableValues.ToList();
+      }
+    } catch (Exception exception) {
+      PluginLog.Error(exception, "Failed to get attribute.");
+    }
+    return new List<string>() { "Error" };
   }
 }

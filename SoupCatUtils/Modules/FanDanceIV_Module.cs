@@ -30,23 +30,22 @@ internal sealed class FanDanceIV_Module : IDisposable {
     Splatoon.SetOnConnect(SplatoonOnConnect);
   }
 
-  void SplatoonOnConnect() {
+  internal void SplatoonOnConnect() {
     Update(Services.Framework);
     Services.Framework.Update += Update;
   }
 
-  static bool AreInRange(float range, Vector3 v1, Vector3 v2, float v1H = 0.0f, float v2H = 0.0f) {
+  private static bool AreInRange(float range, Vector3 v1, Vector3 v2, float v1H = 0.0f, float v2H = 0.0f) {
     return range > Vector3.Distance(new Vector3(v1.X, v1.Z, v1.Y), new Vector3(v2.X, v2.Z, v2.Y)) - v1H - v2H;
   }
 
-  UInt32 Vector4FromRGBA(UInt32 rgba) {
-		string hex = "";
+  private static uint Vector4FromRGBA(uint rgba) {
 		var array = rgba.ToString("X4").SplitInParts(2).ToArray();
-		hex = array[3] + array[2] + array[1] + array[0];
+		string hex = array[3] + array[2] + array[1] + array[0];
 		return Convert.ToUInt32(hex, 16);
   }
 
-  internal void Update(Framework framework) {
+  private void Update(Framework framework) {
     //if (Environment.TickCount64 > long.MaxValue) {
     try {
       Splatoon.RemoveDynamicElements(ToLayerName());

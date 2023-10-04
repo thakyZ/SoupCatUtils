@@ -19,18 +19,8 @@ public class SPLSection : SectionBase, IDisposable {
   public SPLSection() {
   }
 
-  public new void Dispose() {
-    Dispose(true);
-    GC.SuppressFinalize(this);
-  }
-
-  private bool _isDisposed = false;
-
-  protected virtual void Dispose(bool disposing) {
-    if (!_isDisposed && disposing) {
+  protected override void DisposeImpl() {
       Services.FanDanceIV_Module.Dispose();
-      _isDisposed = true;
-    }
   }
 
   public override void Draw() {

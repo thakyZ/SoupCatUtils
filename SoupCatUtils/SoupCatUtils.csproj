@@ -135,6 +135,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EditorConfigFiles Remove="$(SolutionDir)lib\.editorconfig" />
+    <None Include="$(SolutionDir)lib\.editorconfig" Link="lib\.editorconfig" />
+    <None Remove="bin\**" />
     <!-- Hide the bin folder when configuration is set to "Debug" -->
     <Compile Remove="bin\**" />
     <None Remove="bin\**" />
@@ -144,9 +147,13 @@
     <!-- Add the main editor config to the IDE -->
     <EditorConfigFiles Remove=".editorconfig" />
     <None Include="$(SolutionDir)\.editorconfig" Link=".editorconfig" />
+    <Folder Include="Providers\" />
+    <Folder Include="Resources\" />
     <!-- Add the resources for later use (They are not used at this moment) -->
     <Folder Include="Resources\" />
     <Compile Update="Properties\Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
+    <Compile Remove="Plugin.cs" />
+    <None Include="Plugin.cs" />
     <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
   </ItemGroup>
 
@@ -163,7 +170,8 @@
   </ItemGroup>
 
   <!-- A prebuild task, will alter the code based on other config files upon building -->
-  <Target Name="PreBuild-MSBuildTasks" BeforeTargets="Build">
+  <Target Name="PreCoreResGen-MSBuildTasks" BeforeTargets="ResolveProjectReferences">
+    <Copy SourceFiles="$(ProjectDir)Plugin.cs" DestinationFiles="$(ProjectDir)Plugin.bak.cs" />
     <Message Text="Project File: $(ProjectDir)SoupCatUtils.csproj" />
     <!-- Get the plugin author from this project file -->
     <XmlRead Prefix="n" Namespace="http://schemas.microsoft.com/developer/msbuild/2003" XPath="/n:Project/n:PropertyGroup/n:Authors/text()" XmlFileName="$(ProjectDir)SoupCatUtils.csproj">
@@ -183,8 +191,9 @@
       /*$${TOKEN}$$*/
     -->
     <Message Text="Build Targets: $(BuildTargets)" />
-    <FileUpdate Files="$(ProjectDir)Plugin.cs" Regex="StaticAuthor = &quot;.*?&quot;;" ReplacementText="StaticAuthor = &quot;$(Authors)&quot;;" />
-    <FileUpdate Files="$(ProjectDir)Plugin.cs" Regex="StaticName = &quot;.*?&quot;;" ReplacementText="StaticName = &quot;$(Title)&quot;;" />
+    <FileUpdate Files="$(ProjectDir)Plugin.bak.cs" Regex="StaticAuthor = &quot;.*?&quot;;" ReplacementText="StaticAuthor = &quot;$(Authors)&quot;;" />
+    <FileUpdate Files="$(ProjectDir)Plugin.bak.cs" Regex="StaticName = &quot;.*?&quot;;" ReplacementText="StaticName = &quot;$(Title)&quot;;" />
+    <OnError ExecuteTargets="Reset-PreBuildTasks" />
   </Target>
 
   <!-- Run the Dalamud packager for the release configuration -->
@@ -227,8 +236,15 @@
     <Delete Files="@(CleanAssemblies)" />
   </Target>
 
+  <Target
+      Name="CoreCompile"
+      Condition="'$(_InvalidConfigurationWarning)' != 'true'"
+      DependsOnTargets="$(BuildDependsOn)"
+      Returns="$(TargetPath)">
+  </Target>
+
   <!-- Reset what was done during the PreBuild Task -->
   <Target Name="Reset-PreBuildTasks" AfterTargets="PostBuild-ILRepack">
-    <Move SourceFiles="$(ProjectDir)Plugin.bak.cs" DestinationFiles="$(ProjectDir)Plugin.cs" />
+    <Delete Files="$(ProjectDir)Plugin.bak.cs" />
   </Target>
 </Project>
