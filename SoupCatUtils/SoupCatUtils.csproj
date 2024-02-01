@@ -7,7 +7,7 @@
       "up to 30" and "EVERYTHING" modes supported by the game. Also has (or will have) an option to omit the
       island sanctuary minions from being spawned.
     </Description>
-    <PackageProjectUrl>https://github.com/thakyZ/BetterMinionRoulette-Dalamud</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/thakyZ/SoupCatUtils</PackageProjectUrl>
     <Copyright></Copyright>
     <RootNamespace>NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils</RootNamespace>
     <Title>Soup Cat Utils</Title>
@@ -37,7 +37,7 @@
 
   <PropertyGroup Label="Feature">
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <Version>1.0.0.0</Version>
+    <Version>1.0.0.1</Version>
   </PropertyGroup>
 
   <PropertyGroup>
