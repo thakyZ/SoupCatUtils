@@ -1,18 +1,16 @@
-﻿using Dalamud.Game.Gui;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
+
+using ECommons.DalamudServices.Legacy;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
 
 internal sealed class Chat {
-  private readonly ChatGui _chatGui;
-
-  public Chat(ChatGui chatGui) {
-    _chatGui = chatGui;
+  public Chat() {
   }
 
   public void Error(string e) {
-    _chatGui.PrintChat(new XivChatEntry {
+    Services.ChatGui.PrintChat(new XivChatEntry {
       Message = new SeStringBuilder()
             .AddUiForeground($"[{Plugin.StaticName}] ", 16)
             .AddText(e).Build(),
@@ -21,12 +19,12 @@ internal sealed class Chat {
   }
 
   public void Message(string message) {
-    _chatGui.Print(new SeStringBuilder()
+    Services.ChatGui.Print(new SeStringBuilder()
         .AddUiForeground($"[{Plugin.StaticName}] ", 57)
         .AddText(message).Build());
   }
 
   public void UnformattedMessage(string message) {
-    _chatGui.Print(message);
+    Services.ChatGui.Print(message);
   }
 }

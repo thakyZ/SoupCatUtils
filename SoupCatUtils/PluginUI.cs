@@ -1,21 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
-using Dalamud.Game.Command;
-using Dalamud.Interface;
+using Dalamud.Interface.Utility;
 using Dalamud.Interface.Windowing;
-using Dalamud.Logging;
-using Dalamud.IoC;
-using Dalamud.Plugin;
 
 using FFXIVClientStructs.FFXIV.Common.Math;
 
 using ImGuiNET;
 
 using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
-using System.Windows.Forms;
-using static System.Collections.Specialized.BitVector32;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils;
 
@@ -29,12 +22,12 @@ public class PluginUI : Window, IDisposable {
   public PluginUI() : base(Name, WindowFlags) {
     Size = new Vector2(630, 500) * ImGuiHelpers.GlobalScale;
     SizeCondition = ImGuiCond.Always;
-    Sections = new() {
+    Sections = [
       new AboutSection(),
       new HousingSection(),
-      new SPLSection(),
+      new SquidSection(),
       new TweaksSection()
-    };
+    ];
   }
 
   public override void OnClose() {

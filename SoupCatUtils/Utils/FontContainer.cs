@@ -1,17 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 using Dalamud.Interface;
 using Dalamud.Interface.GameFonts;
-using Dalamud.Logging;
+using Dalamud.Interface.ManagedFontAtlas;
 
 using ImGuiNET;
 
@@ -243,8 +239,9 @@ internal static class Extensions {
 }
 
 public partial class FontContainer : IDisposable {
-  private readonly List<(string, string)> fontsByName = new();
-  private Dictionary<string, GameFontHandle> LoadedFonts = new();
+  private readonly List<(string, string)> fontsByName = [];
+  private IFontAtlas? FontAtlas;
+  private Dictionary<string, IFontHandle> LoadedFonts = [];
 
   [GeneratedRegex("[\\d.]{1,3}pt$")]
   private static partial Regex SizeStringRegex();
@@ -283,48 +280,41 @@ public partial class FontContainer : IDisposable {
     return fontsByName.Exists(x => x.Item1 == fontName && x.Item2 == size);
   }
 
-
-  private GameFontHandle LoadFont(string fontName, string size) {
+  private void LoadFont(string fontName, string size) {
     string unparsedSize = UnparseSizeValue(fontName, size);
-    if (LoadedFonts.TryGetValue(unparsedSize, out var value)) {
-      return value!;
+    FontAtlas ??= Services.PluginInterface.UiBuilder.CreateFontAtlas(FontAtlasAutoRebuildMode.OnNewFrame);
+    var fontHandle = FontAtlas.NewGameFontHandle(new GameFontStyle(unparsedSize.GameFontFamilyAndSizeUnProxy()));
+    if (fontHandle.LoadException is not null) {
+      Services.PluginLog.Error("Failed to load font.");
     }
-    LoadedFonts.Add(unparsedSize,
-      Services.PluginInterface.UiBuilder.GetGameFontHandle(
-        new GameFontStyle(unparsedSize.GameFontFamilyAndSizeUnProxy())));
-    return LoadFont(fontName, size);
+    LoadedFonts.Add(unparsedSize, fontHandle);
   }
 
-  public ImFontPtr GetFont(string fontName, int size) {
+  public void PushFont(string fontName, int size) {
     var parsedSize = ParseSizeValue(size);
-    if (CheckSizeExists(fontName, parsedSize)) {
-      return LoadFont(fontName, parsedSize).ImFont;
-    }
-    return UiBuilder.DefaultFont;
+    PushFont(fontName, parsedSize);
   }
 
-  public ImFontPtr GetFont(string fontName, float size) {
+  public void PushFont(string fontName, float size) {
     var parsedSize = ParseSizeValue(size);
-    if (CheckSizeExists(fontName, parsedSize)) {
-      return LoadFont(fontName, parsedSize).ImFont;
-    }
-    return UiBuilder.DefaultFont;
+    PushFont(fontName, parsedSize);
   }
 
-  public ImFontPtr GetFont(string fontName, double size) {
+  public void PushFont(string fontName, double size) {
     var parsedSize = ParseSizeValue(size);
-    if (CheckSizeExists(fontName, parsedSize)) {
-      return LoadFont(fontName, parsedSize).ImFont;
-    }
-    return UiBuilder.DefaultFont;
+    PushFont(fontName, parsedSize);
   }
 
-  public ImFontPtr GetFont(string fontName, string size) {
+  public void PushFont(string fontName, string size) {
     var parsedSize = ParseSizeValue(size);
-    if (CheckSizeExists(fontName, parsedSize)) {
-      return LoadFont(fontName, parsedSize).ImFont;
+    if (!CheckSizeExists(fontName, parsedSize)) {
+      LoadFont(fontName, parsedSize);
     }
-    return UiBuilder.DefaultFont;
+    if (LoadedFonts.TryGetValue(fontName, out IFontHandle? handle) && handle is not null) {
+      handle.Push();
+    } else {
+      ImGui.PushFont(UiBuilder.DefaultFont);
+    }
   }
 
   public static ImFontPtr GetFont() {
@@ -341,7 +331,7 @@ public partial class FontContainer : IDisposable {
   protected virtual void Dispose(bool disposing) {
     if (!_isDisposed && disposing) {
       foreach (var name in LoadedFonts.Keys) {
-        PluginLog.Debug($"Disposing of font: '{name}'");
+        Services.PluginLog.Debug($"Disposing of font: '{name}'");
         LoadedFonts[name].Dispose();
       }
       _isDisposed = true;

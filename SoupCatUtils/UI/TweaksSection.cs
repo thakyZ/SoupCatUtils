@@ -1,9 +1,7 @@
-using System;
-
 using ImGuiNET;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
-public class TweaksSection : SectionBase, IDisposable {
+public class TweaksSection : SectionBase {
   public new string Name { get; set; } = "Tweaks##SoupCatUtils";
   protected override string NameImplementation {
     get { return Name; }

@@ -2,17 +2,18 @@ using System;
 using System.Linq;
 using System.Numerics;
 
-using Dalamud.Game;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
-using Dalamud.Logging;
+using Dalamud.Plugin.Services;
 
 using ECommons.SplatoonAPI;
 
 using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
 
+using Serilog.Events;
+
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Modules;
-internal sealed class FanDanceIV_Module : IDisposable {
+internal sealed class FanDance4Module : IDisposable {
   private readonly DebugState _debugState;
 
   private const float MaxDistance = 15f;
@@ -22,17 +23,17 @@ internal sealed class FanDanceIV_Module : IDisposable {
     public const ushort FourFoldFanDance = 2699;
   }
 
-  public FanDanceIV_Module() {
-    _debugState = Services.FanDanceIV_DebugState;
+  public FanDance4Module() {
+    _debugState = Services.FanDance4DebugState;
 
-    PluginLog.Information("Initializing splatoon");
+    Services.PluginLog.Information("Initializing splatoon");
     //ECommonsMain.Init(pluginInterface, dalamudPlugin, ECommons.Module.SplatoonAPI);
     Splatoon.SetOnConnect(SplatoonOnConnect);
   }
 
   internal void SplatoonOnConnect() {
     Update(Services.Framework);
-    Services.Framework.Update += Update;
+    Services.Framework.Update += this.Update;
   }
 
   private static bool AreInRange(float range, Vector3 v1, Vector3 v2, float v1H = 0.0f, float v2H = 0.0f) {
@@ -45,7 +46,7 @@ internal sealed class FanDanceIV_Module : IDisposable {
 		return Convert.ToUInt32(hex, 16);
   }
 
-  private void Update(Framework framework) {
+  private void Update(IFramework framework) {
     //if (Environment.TickCount64 > long.MaxValue) {
     try {
       Splatoon.RemoveDynamicElements(ToLayerName());
@@ -112,11 +113,15 @@ internal sealed class FanDanceIV_Module : IDisposable {
 
   private void Dispose(bool disposing) {
     if (disposing && !_isDisposed) {
-      PluginLog.Information("Disposing splatoon rendered");
+      Services.PluginLog.Information("Disposing splatoon rendered");
       try {
         Splatoon.RemoveDynamicElements(ToLayerName());
         Disconnect();
-      } catch (Exception) { }
+      } catch (Exception exception) {
+        if (Services.PluginLog.MinimumLogLevel == LogEventLevel.Debug) {
+          Services.PluginLog.Error(exception, "Failed to dispose of splatoon.");
+        }
+      }
       _isDisposed = true;
 
       //ECommonsMain.Dispose();

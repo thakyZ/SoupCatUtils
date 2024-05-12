@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+using System;
 
 using Dalamud.Game.Command;
 using Dalamud.Interface.Windowing;
-using Dalamud.IoC;
 using Dalamud.Plugin;
 
 using ECommons;
 using ECommons.Schedulers;
 
-using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Modules;
 using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
 
 using Module = ECommons.Module;
@@ -20,12 +16,12 @@ public class Plugin : IDalamudPlugin {
   /// <summary>
   /// The private internal instance for the name of the plugin
   /// </summary>
-  public const string StaticName = "Soup Cat Utils";
+  public const string StaticName = "$(Title)";
 
   /// <summary>
   /// The private internal instance for the name of the plugin
   /// </summary>
-  public const string StaticAuthor = "Neko Boi Nick";
+  public const string StaticAuthor = "$(Authors)";
 
   /// <summary>
   /// The name of the plugin
@@ -42,7 +38,7 @@ public class Plugin : IDalamudPlugin {
   /// </summary>
   internal WindowSystem WindowSystem = new(StaticName.Replace(" ",string.Empty));
 
-  public Plugin([RequiredVersion("1.0")] DalamudPluginInterface pluginInterface) {
+  public Plugin(DalamudPluginInterface pluginInterface) {
     Services.Initialize(pluginInterface);
 
     Services.PluginInstance = this;
@@ -56,7 +52,7 @@ public class Plugin : IDalamudPlugin {
     WindowSystem.AddWindow(Services.UI);
 
     Services.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand) {
-      HelpMessage = "The soup cat util command",
+      HelpMessage = "The soup cat utilities command",
       ShowInHelp = true
     });
 
@@ -66,8 +62,8 @@ public class Plugin : IDalamudPlugin {
     Services.Tools.Housing = new Tools.Housing();
 
     _ = new TickScheduler(delegate {
-      Services.FanDanceIV_DebugState = new();
-      Services.FanDanceIV_Module = new();
+      Services.FanDance4DebugState = new();
+      Services.FanDance4Module = new();
     });
   }
 

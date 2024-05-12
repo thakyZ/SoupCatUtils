@@ -1,11 +1,8 @@
 // Ignore Spelling: Splatoon
 
 using System;
-using System.Collections.Generic;
 
 using Dalamud.Configuration;
-
-using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 
 using Newtonsoft.Json;
 

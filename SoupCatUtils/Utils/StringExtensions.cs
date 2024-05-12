@@ -1,13 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
-
-using Dalamud.Logging;
-
-using static NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI.HousingSection;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
 public static partial class StringExtensions {
@@ -27,9 +21,9 @@ public static partial class StringExtensions {
     Regex firstCharFollowedByUpperCasesOnly = new Regex("(?<=[A-Z])[A-Z0-9]+$");
     Regex lowerCaseNextToNumber = new Regex("(?<=[0-9])[a-z]");
     Regex upperCaseInside = new Regex("(?<=[A-Z])[A-Z]+?((?=[A-Z][a-z])|(?=[0-9]))");
-    // replace white spaces with undescore, then replace all invalid chars with empty string
+    // replace white spaces with underscore, then replace all invalid chars with empty string
     var pascalCase = invalidCharsRgx.Replace(whiteSpace.Replace(text, "_"), string.Empty) // split by underscores
-      .Split(new char[]{'_'}, StringSplitOptions.RemoveEmptyEntries) // set first letter to uppercase
+      .Split("_", StringSplitOptions.RemoveEmptyEntries) // set first letter to uppercase
       .Select(w => startsWithLowerCaseChar.Replace(w, m => m.Value.ToUpper())) // replace second and all following upper case letters to lower if there is no next lower (ABC -> Abc)
       .Select(w => firstCharFollowedByUpperCasesOnly.Replace(w, m => m.Value.ToLower())) // set upper case the first lower case following a number (Ab9cd -> Ab9Cd)
       .Select(w => lowerCaseNextToNumber.Replace(w, m => m.Value.ToUpper())) // lower second and next upper case letters except the last if it follows by any lower (ABcDEf -> AbcDef)
@@ -45,9 +39,9 @@ public static partial class StringExtensions {
     Regex firstCharFollowedByUpperCasesOnly = new Regex("(?<=[A-Z])[A-Z0-9]+$");
     Regex lowerCaseNextToNumber = new Regex("(?<=[0-9])[a-z]");
     Regex upperCaseInside = new Regex("(?<=[A-Z])[A-Z]+?((?=[A-Z][a-z])|(?=[0-9]))");
-    // replace white spaces with undescore, then replace all invalid chars with empty string
+    // replace white spaces with underscore, then replace all invalid chars with empty string
     var camelCase = invalidCharsRgx.Replace(whiteSpace.Replace(text, "_"), string.Empty) // split by underscores
-      .Split(new char[]{'_'}, StringSplitOptions.RemoveEmptyEntries) // set first letter to uppercase
+      .Split("_", StringSplitOptions.RemoveEmptyEntries) // set first letter to uppercase
       .Select(w => startsWithLowerCaseChar.Replace(w, m => m.Value.ToUpper())) // replace second and all following upper case letters to lower if there is no next lower (ABC -> Abc)
       .Select(w => firstCharFollowedByUpperCasesOnly.Replace(w, m => m.Value.ToLower())) // set upper case the first lower case following a number (Ab9cd -> Ab9Cd)
       .Select(w => lowerCaseNextToNumber.Replace(w, m => m.Value.ToUpper())) // lower second and next upper case letters except the last if it follows by any lower (ABcDEf -> AbcDef)
@@ -55,13 +49,20 @@ public static partial class StringExtensions {
     return string.Concat(camelCase).Trim();
   }
 
-	public static IEnumerable<String> SplitInParts(this String s, Int32 partLength)
+	public static IEnumerable<string> SplitInParts(this string s, int partLength)
 	{
-		if (s == null)
-			throw new ArgumentNullException(nameof(s));
-		if (partLength <= 0)
-			throw new ArgumentException("Part length has to be positive.", nameof(partLength));
-		for (var i = 0; i < s.Length; i += partLength)
-			yield return s.Substring(i, Math.Min(partLength, s.Length - i));
-	}
+    if (string.IsNullOrEmpty(s)) {
+      throw new ArgumentNullException(nameof(s));
+    }
+    if (partLength <= 0) {
+      throw new ArgumentException("Part length has to be positive.", nameof(partLength));
+    }
+    return SplitInPartsIterator(s, partLength);
+  }
+
+  private static IEnumerable<string> SplitInPartsIterator(string s, int partLength) {
+    for (var i = 0; i < s.Length; i += partLength) {
+      yield return s.Substring(i, Math.Min(partLength, s.Length - i));
+    }
+  }
 }

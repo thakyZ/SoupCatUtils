@@ -1,16 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection.Emit;
-using System.Reflection.Metadata.Ecma335;
-using System.Xml.Linq;
-
-using Dalamud.Game.Gui;
-using Dalamud.Interface;
 
 using ImGuiNET;
-
-using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
 
@@ -44,7 +34,7 @@ public abstract class SectionBase : IDisposable {
 
   public static void CreateTitle(string h1, string h2 = "", string h3 = "") {
     float baseCursorPos = ImGui.GetCursorPosY();
-    ImGui.PushFont(Services.FontContainer.GetFont("AXIS", 36));
+    Services.FontContainer.PushFont("AXIS", 36);
     ImGui.Text(h1);
     ImGui.PopFont();
 
@@ -53,7 +43,7 @@ public abstract class SectionBase : IDisposable {
       ImGui.Spacing();
       ImGui.SameLine();
 
-      ImGui.PushFont(Services.FontContainer.GetFont("AXIS", 18));
+      Services.FontContainer.PushFont("AXIS", 18);
       ImGui.SetCursorPosY(baseCursorPos + (36 - 17));
       ImGui.Text(h2);
       ImGui.PopFont();
@@ -63,7 +53,7 @@ public abstract class SectionBase : IDisposable {
         ImGui.Spacing();
         ImGui.SameLine();
 
-        ImGui.PushFont(Services.FontContainer.GetFont("AXIS", 12));
+        Services.FontContainer.PushFont("AXIS", 12);
         ImGui.SetCursorPosY(baseCursorPos + (36 - 10));
         ImGui.Text(h3);
         ImGui.PopFont();
@@ -72,7 +62,7 @@ public abstract class SectionBase : IDisposable {
   }
 
   public static void CreateTitle(string h2 = "") {
-    ImGui.PushFont(Services.FontContainer.GetFont("AXIS", 18));
+    Services.FontContainer.PushFont("AXIS", 18);
     ImGui.Text(h2);
     ImGui.PopFont();
   }

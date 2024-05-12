@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Target">
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <PlatformTarget>x64</PlatformTarget>
     <Platforms>x64</Platforms>
     <Configurations>Release;Debug</Configurations>
@@ -23,6 +23,7 @@
     <LangVersion>Latest</LangVersion>
     <GenerateDependencyFile>False</GenerateDependencyFile>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <Configurations>Debug;Release;ILRepackTest;PersonalRelease</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Label="Build">
@@ -59,7 +60,7 @@
     </BuildDependsOn>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <AssemblyName>$(MSBuildProjectName)2</AssemblyName>
     <Optimize>False</Optimize>
     <OutputPath>$(DalamudDevPlugins)\$(MSBuildProjectName)\</OutputPath>
@@ -68,18 +69,41 @@
     <DebugType>Full</DebugType>
     <ErrorReport>Prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <!--<BuildDependsOn>
-      $(BuildDependsOn);
-      PostBuild-ILRepack
-    </BuildDependsOn>-->
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+  <PropertyGroup Condition="'$(Configuration)'=='ILRepackTest'">
+    <AssemblyName>$(MSBuildProjectName)2</AssemblyName>
+    <Optimize>False</Optimize>
+    <OutputPath>$(DalamudDevPlugins)\$(MSBuildProjectName)\</OutputPath>
+    <BaseOutputPath>$(DalamudDevPlugins)\$(MSBuildProjectName)\</BaseOutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>Full</DebugType>
+    <ErrorReport>Prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <BuildDependsOn>
+      $(BuildDependsOn);
+      PostBuild-ILRepack
+    </BuildDependsOn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='PersonalRelease'">
+    <AssemblyName>$(MSBuildProjectName)2</AssemblyName>
+    <Optimize>True</Optimize>
+    <OutputPath>$(DalamudDevPlugins)\$(MSBuildProjectName)\</OutputPath>
+    <BaseOutputPath>$(DalamudDevPlugins)\$(MSBuildProjectName)\</BaseOutputPath>
+    <DefineConstants>TRACE</DefineConstants>
     <DebugType>PDBOnly</DebugType>
+    <ErrorReport>Prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
     <Optimize>True</Optimize>
     <OutputPath>$(SolutionDir)bin\Release\</OutputPath>
+    <BaseOutputPath>$(SolutionDir)bin\Release\</BaseOutputPath>
     <DefineConstants>TRACE</DefineConstants>
+    <DebugType>PDBOnly</DebugType>
     <ErrorReport>Prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -87,9 +111,13 @@
   <ItemGroup>
     <ProjectReference Include="$(SolutionDir)lib\ECommons\ECommons\ECommons.csproj" />
     <!-- These are used for the tasks in the target called "PackagePlugin" -->
-    <PackageReference Include="DalamudPackager" Version="2.1.11" />
+    <PackageReference Include="DalamudPackager" Version="2.1.12" />
     <!-- These are used for the tasks in the target called "PostBuild-ILRepack" -->
-    <PackageReference Include="ILRepack" Version="2.0.18" GeneratePathProperty="true" />
+    <PackageReference Include="ILRepack" Version="2.0.33" GeneratePathProperty="true">
+      <PrivateAssets>all</PrivateAssets>
+      <!-- Ignore Spelling: contentfiles, buildtransitive -->
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <!-- These are used for the tasks in the target called "PreBuild-MSBuildTasks" -->
     <PackageReference Include="MSBuildTasks" Version="1.5.0.235" PrivateAssets="all" IncludeAssets="runtime;build;native;contentfiles;analyzers;buildtransitive" />
     <Reference Include="Dalamud">
@@ -120,16 +148,20 @@
       <HintPath>$(DalamudLibPath)\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Serilog">
+      <HintPath>$(DalamudLibPath)\Serilog.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
 
-  <!-- When the configuration is set to "Release" it will only read from the main plugin config file -->
-  <ItemGroup Condition=" '$(Configuration)' == 'Release' ">
+  <!-- When the configuration is set to "Release" it will only read from the main plugin configuration file -->
+  <ItemGroup Condition="'$(Configuration)'=='Release'">
     <Content Include="$(MSBuildProjectName).yaml" CopyToOutputDirectory="Never" />
     <None Remove="$(MSBuildProjectName)2.yaml" />
   </ItemGroup>
 
-  <!-- When the configuration is set to "Debug" it will only read from the development plugin config file -->
-  <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
+  <!-- When the configuration is set to "Debug" it will only read from the development plugin configuration file -->
+  <ItemGroup Condition="'$(Configuration)'=='Debug' OR '$(Configuration)'=='ILRepackTest' OR '$(Configuration)'=='PersonalRelease'">
     <None Remove="$(MSBuildProjectName).yaml" />
     <Content Include="$(MSBuildProjectName)2.yaml" CopyToOutputDirectory="Never" />
   </ItemGroup>
@@ -142,36 +174,36 @@
     <Compile Remove="bin\**" />
     <None Remove="bin\**" />
     <!-- Add git files to the IDE -->
-    <Content Include="$(SolutionDir)\.gitignore" CopyToOutputDirectory="Never" />
-    <Content Include="$(SolutionDir)\.gitattributes" CopyToOutputDirectory="Never" />
-    <!-- Add the main editor config to the IDE -->
+    <Content Include="$(SolutionDir).gitignore" CopyToOutputDirectory="Never" />
+    <Content Include="$(SolutionDir).gitattributes" CopyToOutputDirectory="Never" />
+    <!-- Add the main .editorconfig file to the IDE -->
     <EditorConfigFiles Remove=".editorconfig" />
-    <None Include="$(SolutionDir)\.editorconfig" Link=".editorconfig" />
+    <None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
     <Folder Include="Providers\" />
     <Folder Include="Resources\" />
     <!-- Add the resources for later use (They are not used at this moment) -->
     <Folder Include="Resources\" />
     <Compile Update="Properties\Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
-    <Compile Remove="Plugin.cs" />
-    <None Include="Plugin.cs" />
+    <Compile Remove="Plugin.bak.cs" />
+    <None Include="Plugin.bak.cs" />
     <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
   </ItemGroup>
 
-  <!-- Add the personal, local, SonarLint editor config file to ignore common warnings -->
+  <!-- Add the personal, local, SonarLint .editorconfig file to ignore common warnings -->
   <ItemGroup Condition="Exists('$(AppData)\MSRuleSets\sonarlint.editorconfig')">
     <None Include="$(AppData)\MSRuleSets\sonarlint.editorconfig" Link="sonarlint.editorconfig" />
     <EditorConfigFiles Remove="$(AppData)\MSRuleSets\sonarlint.editorconfig" />
   </ItemGroup>
 
-  <!-- Add the personal, local, Roslynator editor config file to ignore common warnings -->
+  <!-- Add the personal, local, Roslynator .editorconfig file to ignore common warnings -->
   <ItemGroup Condition="Exists('$(AppData)\MSRuleSets\roslynator.editorconfig')">
     <None Include="$(AppData)\MSRuleSets\roslynator.editorconfig" Link="roslynator.editorconfig" />
     <EditorConfigFiles Remove="$(AppData)\MSRuleSets\roslynator.editorconfig" />
   </ItemGroup>
 
-  <!-- A prebuild task, will alter the code based on other config files upon building -->
+  <!-- A prebuild task, will alter the code based on other configuration files upon building -->
   <Target Name="PreCoreResGen-MSBuildTasks" BeforeTargets="ResolveProjectReferences">
-    <Copy SourceFiles="$(ProjectDir)Plugin.cs" DestinationFiles="$(ProjectDir)Plugin.bak.cs" />
+    <Copy SourceFiles="$(ProjectDir)Plugin.bak.cs" DestinationFiles="$(ProjectDir)Plugin.cs" />
     <Message Text="Project File: $(ProjectDir)SoupCatUtils.csproj" />
     <!-- Get the plugin author from this project file -->
     <XmlRead Prefix="n" Namespace="http://schemas.microsoft.com/developer/msbuild/2003" XPath="/n:Project/n:PropertyGroup/n:Authors/text()" XmlFileName="$(ProjectDir)SoupCatUtils.csproj">
@@ -191,18 +223,19 @@
       /*$${TOKEN}$$*/
     -->
     <Message Text="Build Targets: $(BuildTargets)" />
-    <FileUpdate Files="$(ProjectDir)Plugin.bak.cs" Regex="StaticAuthor = &quot;.*?&quot;;" ReplacementText="StaticAuthor = &quot;$(Authors)&quot;;" />
-    <FileUpdate Files="$(ProjectDir)Plugin.bak.cs" Regex="StaticName = &quot;.*?&quot;;" ReplacementText="StaticName = &quot;$(Title)&quot;;" />
+    <!-- See: https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-special-characters -->
+    <FileUpdate Files="$(ProjectDir)Plugin.cs" Regex="StaticAuthor = &quot;\%24\%28Authors\%29&quot;;" ReplacementText="StaticAuthor = &quot;$(Authors)&quot;;" />
+    <FileUpdate Files="$(ProjectDir)Plugin.cs" Regex="StaticName = &quot;\%24\%28Title\%29&quot;;" ReplacementText="StaticName = &quot;$(Title)&quot;;" />
     <OnError ExecuteTargets="Reset-PreBuildTasks" />
   </Target>
 
   <!-- Run the Dalamud packager for the release configuration -->
-  <Target Name="PackagePlugin" AfterTargets="Build" Condition=" '$(Configuration)' == 'Release' ">
+  <Target Name="PackagePlugin" AfterTargets="Build" Condition="'$(Configuration)'=='Release'">
     <DalamudPackager ProjectDir="$(ProjectDir)" OutputPath="$(OutputPath)" AssemblyName="$(AssemblyName)" MakeZip="true" />
   </Target>
 
   <!-- Run the Dalamud packager for the debug configuration -->
-  <Target Name="PackagePlugin" AfterTargets="Build" Condition=" '$(Configuration)' == 'Debug' ">
+  <Target Name="PackagePlugin" AfterTargets="Build" Condition="'$(Configuration)'=='Debug' OR '$(Configuration)'=='ILRepackTest' OR '$(Configuration)'=='PersonalRelease'">
     <DalamudPackager ProjectDir="$(ProjectDir)" OutputPath="$(OutputPath)" AssemblyName="$(AssemblyName)" MakeZip="false" />
   </Target>
 
@@ -213,14 +246,23 @@
     </ItemGroup>
     <Message Text="Deleting @(DeleteAssemblies)" Importance="high" />
     <Delete Files="@(DeleteAssemblies)" />
-    <RemoveDir Directories="$(TargetDir)\ref\" />
+    <RemoveDir Directories="$(TargetDir)ref\" />
     <!-- Some libraries copy over a folder called "runtimes" that contain duplicates of binary files, so just remove anyways. -->
-    <RemoveDir Directories="$(TargetDir)\runtimes\" />
+    <RemoveDir Directories="$(TargetDir)runtimes\" />
+  </Target>
+
+  <!-- Reset what was done during the PreBuild Task -->
+  <Target Name="Reset-PreBuildTasks" AfterTargets="CleanOutDir">
+    <ItemGroup>
+      <PreBuildFiles Include="$(ProjectDir)Plugin.cs" />
+    </ItemGroup>
+    <Message Importance="High" Text="Trying to delete:%0a   @(PreBuildFiles, ',%0a   ')" />
+    <Exec Command="del /F &quot;@(PreBuildFiles)&quot;" ConsoleToMsBuild="True" />
   </Target>
 
   <!-- When building the plugin into 'XIVLauncher/devPlugins' having loose binaries throws errors in the console so package them into the main binary -->
   <!-- I don't believe the developers for Dalamud will fix those errors from showing up -->
-  <Target Name="PostBuild-ILRepack" AfterTargets="CleanOutDir" Condition=" '$(Configuration)' == 'Debug' ">
+  <Target Name="PostBuild-ILRepack" AfterTargets="CleanOutDir" Condition="'$(Configuration)'=='Debug' OR '$(Configuration)'=='ILRepackTest'">
     <ItemGroup>
       <InputAssemblies Include="$(TargetPath)" />
       <InputAssemblies Include="$(TargetDir)*.dll" Exclude="$(TargetPath)" />
@@ -236,15 +278,11 @@
     <Delete Files="@(CleanAssemblies)" />
   </Target>
 
-  <Target
-      Name="CoreCompile"
-      Condition="'$(_InvalidConfigurationWarning)' != 'true'"
-      DependsOnTargets="$(BuildDependsOn)"
-      Returns="$(TargetPath)">
+  <Target Name="CoreCompile" Condition="'$(_InvalidConfigurationWarning)' != 'true'" DependsOnTargets="$(BuildDependsOn)" Returns="$(TargetPath)">
   </Target>
 
   <!-- Reset what was done during the PreBuild Task -->
-  <Target Name="Reset-PreBuildTasks" AfterTargets="PostBuild-ILRepack">
-    <Delete Files="$(ProjectDir)Plugin.bak.cs" />
+  <Target Name="Reset-PreBuildTasks-ILRepack" AfterTargets="PostBuild-ILRepack">
+    <Delete Files="$(ProjectDir)Plugin.cs" />
   </Target>
 </Project>

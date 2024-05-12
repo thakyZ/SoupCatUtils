@@ -1,15 +1,6 @@
-using System;
-
-using Dalamud.Interface;
-using Dalamud.Interface.Windowing;
-
-using FFXIVClientStructs.FFXIV.Common.Math;
-
-using ImGuiNET;
-
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
 
-public class AboutSection : SectionBase, IDisposable {
+public class AboutSection : SectionBase {
   public new string Name { get; set; } = "About##SoupCatUtils";
   protected override string NameImplementation {
     get { return Name; }

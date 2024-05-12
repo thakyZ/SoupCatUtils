@@ -1,12 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-
-using Dalamud.Game.ClientState.Fates;
-using Dalamud.Logging;
-
-using FFXIVClientStructs.STD;
 
 using Lumina.Excel;
 using Lumina.Excel.GeneratedSheets;
@@ -66,7 +59,7 @@ public enum TerritoryTypes {
 
 public class Housing {
   private readonly ExcelSheet<HousingLandSet>? HousingLandSets;
-  private readonly TerritoryTypes[] territoryTypes = new TerritoryTypes[] { TerritoryTypes.Mist, TerritoryTypes.LavenderBeds, TerritoryTypes.Goblet, TerritoryTypes.Shirogane, TerritoryTypes.Empyreum };
+  private readonly TerritoryTypes[] territoryTypes = [TerritoryTypes.Mist, TerritoryTypes.LavenderBeds, TerritoryTypes.Goblet, TerritoryTypes.Shirogane, TerritoryTypes.Empyreum];
 
   public Housing() {
     HousingLandSets = Services.DataManager.GetExcelSheet<HousingLandSet>();
@@ -84,56 +77,60 @@ public class Housing {
     DataTable dataTable = new DataTable(tableName);
     DataColumn dataColumn;
     // Create index column
-    dataColumn = new DataColumn();
-    dataColumn.DataType = typeof(uint);
-    dataColumn.ColumnName = "index";
-    dataColumn.Caption = "Index";
-    dataColumn.ReadOnly = false;
-    dataColumn.Unique = true;
+    dataColumn = new DataColumn {
+      DataType = typeof(uint),
+      ColumnName = "index",
+      Caption = "Index",
+      ReadOnly = false,
+      Unique = true
+    };
     // Add column to the DataColumnCollection.
     dataTable.Columns.Add(dataColumn);
     // Create district column
-    dataColumn = new DataColumn();
-    dataColumn.DataType = typeof(string);
-    dataColumn.ColumnName = "district";
-    dataColumn.Caption = "District";
-    dataColumn.AutoIncrement = false;
-    dataColumn.ReadOnly = false;
-    dataColumn.Unique = false;
+    dataColumn = new DataColumn {
+      DataType = typeof(string),
+      ColumnName = "district",
+      Caption = "District",
+      AutoIncrement = false,
+      ReadOnly = false,
+      Unique = false
+    };
     // Add column to the DataColumnCollection.
     dataTable.Columns.Add(dataColumn);
     // Create plot number column
-    dataColumn = new DataColumn();
-    dataColumn.DataType = typeof(int);
-    dataColumn.ColumnName = "plot_num";
-    dataColumn.Caption = "Plot #";
-    dataColumn.AutoIncrement = false;
-    dataColumn.ReadOnly = false;
-    dataColumn.Unique = false;
+    dataColumn = new DataColumn {
+      DataType = typeof(int),
+      ColumnName = "plot_num",
+      Caption = "Plot #",
+      AutoIncrement = false,
+      ReadOnly = false,
+      Unique = false
+    };
     // Add column to the DataColumnCollection.
     dataTable.Columns.Add(dataColumn);
     // Create plot size column
-    dataColumn = new DataColumn();
-    dataColumn.DataType = typeof(string);
-    dataColumn.ColumnName = "size";
-    dataColumn.Caption = "Size";
-    dataColumn.AutoIncrement = false;
-    dataColumn.ReadOnly = false;
-    dataColumn.Unique = false;
+    dataColumn = new DataColumn {
+      DataType = typeof(string),
+      ColumnName = "size",
+      Caption = "Size",
+      AutoIncrement = false,
+      ReadOnly = false,
+      Unique = false
+    };
     // Add column to the DataColumnCollection.
     dataTable.Columns.Add(dataColumn);
     // Create plot size column
-    dataColumn = new DataColumn();
-    dataColumn.DataType = typeof(float);
-    dataColumn.ColumnName = "price";
-    dataColumn.Caption = "Price Mil";
-    dataColumn.AutoIncrement = false;
-    dataColumn.ReadOnly = false;
-    dataColumn.Unique = false;
+    dataColumn = new DataColumn {
+      DataType = typeof(float),
+      ColumnName = "price",
+      Caption = "Price Mil",
+      AutoIncrement = false,
+      ReadOnly = false,
+      Unique = false
+    };
     // Add column to the DataColumnCollection.
     dataTable.Columns.Add(dataColumn);
-    DataColumn[] primaryKeyColumns = new DataColumn[1];
-    primaryKeyColumns[0] = dataTable.Columns["index"]!;
+    DataColumn[] primaryKeyColumns = [dataTable.Columns["index"]!];
     dataTable.PrimaryKey = primaryKeyColumns;
     return dataTable;
   }
@@ -151,8 +148,8 @@ public class Housing {
       for (int plotNumber = 0; plotNumber < 60; plotNumber++) {
         dataRow = dataTable.NewRow();
         string districtName = territoryType.ToDescriptionString();
-        byte? houseSize = landSet?.PlotSize[plotNumber];
-        uint realPrice = landSet?.InitialPrice[plotNumber] ?? 0;
+        byte? houseSize = landSet.PlotSize[plotNumber];
+        uint realPrice = landSet.InitialPrice[plotNumber];
         float housePriceMillions = realPrice / 1000000f;
         string houseSizeName = houseSize switch {
           0 => "Small",
