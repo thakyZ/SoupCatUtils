@@ -1,16 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Reflection;
-
-using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Tools;
-using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI.Data;
 
-internal class DataFilter {
-
+internal sealed class DataFilter {
   [StringRange(typeof(TerritoryTypes), "None")]
   public string districtDataFilter = "None";
 
@@ -44,7 +37,7 @@ internal class DataFilter {
         return [.. attributes.First().Item2.AllowableValues];
       }
     } catch (Exception exception) {
-      Services.PluginLog.Error(exception, "Failed to get attribute.");
+      Svc.Log.Error(exception, "Failed to get attribute.");
     }
     return ["Error"];
   }

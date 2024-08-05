@@ -3,5 +3,6 @@ internal_name: SoupCatUtils2
 author: Neko Boi Nick
 punchline: Just a bunch of soupified tools
 description: |-
-  Tools for the soup cat boi
+  Personal tools for the soup cat boi
 repo_url: https://github.com/thakyZ/SoupCatUtils
+icon_url: https://raw.githubusercontent.com/thakyZ/SoupCatUtils/main/images/icon.png

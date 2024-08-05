@@ -1,0 +1,31 @@
+{
+    "version": "0.2",
+    "ignorePaths": [
+      "**/cspell.json"
+    ],
+    "dictionaries": [
+      "en_US",
+      "companies",
+      "softwareTerms",
+      "misc",
+      "csharp",
+      "fonts",
+      "filetypes",
+      "ffxiv"
+    ],
+    "words": [
+      "Splatoon",
+      "Shirogane",
+      "Empyreum",
+      "Lalachievements",
+      "Meidinger",
+      "CHNAXIS",
+      "Serilog"
+    ],
+    "ignoreWords": [
+      "thicc"
+    ],
+    "ignoreRegExpList": [
+      "/(?<=\\/)soupcat"
+    ]
+}

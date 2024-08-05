@@ -10,7 +10,7 @@ internal sealed class Chat {
   }
 
   public void Error(string e) {
-    Services.ChatGui.PrintChat(new XivChatEntry {
+    Svc.Chat.PrintChat(new XivChatEntry {
       Message = new SeStringBuilder()
             .AddUiForeground($"[{Plugin.StaticName}] ", 16)
             .AddText(e).Build(),
@@ -19,12 +19,12 @@ internal sealed class Chat {
   }
 
   public void Message(string message) {
-    Services.ChatGui.Print(new SeStringBuilder()
+    Svc.Chat.Print(new SeStringBuilder()
         .AddUiForeground($"[{Plugin.StaticName}] ", 57)
         .AddText(message).Build());
   }
 
   public void UnformattedMessage(string message) {
-    Services.ChatGui.Print(message);
+    Svc.Chat.Print(message);
   }
 }

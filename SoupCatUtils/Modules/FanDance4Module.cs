@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using System.Numerics;
 
 using Dalamud.Game.ClientState.Objects.SubKinds;
@@ -8,13 +6,12 @@ using Dalamud.Plugin.Services;
 
 using ECommons.SplatoonAPI;
 
-using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
-
 using Serilog.Events;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Modules;
-internal sealed class FanDance4Module : IDisposable {
-  private readonly DebugState _debugState;
+
+internal sealed class FanDance4Module : ModuleBase {
+  internal static DebugState DebugState { get; } = new();
 
   private const float MaxDistance = 15f;
   private const long OnTerritoryChange = -2;
@@ -23,17 +20,14 @@ internal sealed class FanDance4Module : IDisposable {
     public const ushort FourFoldFanDance = 2699;
   }
 
-  public FanDance4Module() {
-    _debugState = Services.FanDance4DebugState;
-
-    Services.PluginLog.Information("Initializing splatoon");
-    //ECommonsMain.Init(pluginInterface, dalamudPlugin, ECommons.Module.SplatoonAPI);
+  public FanDance4Module() : base(true) {
+    Svc.Log.Information("Initializing splatoon");
     Splatoon.SetOnConnect(SplatoonOnConnect);
   }
 
   internal void SplatoonOnConnect() {
-    Update(Services.Framework);
-    Services.Framework.Update += this.Update;
+    Update(Svc.Framework);
+    Svc.Framework.Update += this.Update;
   }
 
   private static bool AreInRange(float range, Vector3 v1, Vector3 v2, float v1H = 0.0f, float v2H = 0.0f) {
@@ -46,14 +40,13 @@ internal sealed class FanDance4Module : IDisposable {
 		return Convert.ToUInt32(hex, 16);
   }
 
-  private void Update(IFramework framework) {
-    //if (Environment.TickCount64 > long.MaxValue) {
+  internal override void Update(IFramework framework) {
     try {
       Splatoon.RemoveDynamicElements(ToLayerName());
-      if (Services.PluginConfig.SplatoonFanDanceIV) {
-        PlayerCharacter? localPlayer = Services.ClientState.LocalPlayer;
+      if (System.PluginConfig.SplatoonFanDanceIV) {
+        IPlayerCharacter? localPlayer = Svc.ClientState.LocalPlayer;
         if (localPlayer is not null) {
-          GameObject? target = Services.TargetManager.Target;
+          IGameObject? target = Svc.Targets.Target;
           if (target is not null) {
             Vector3 playerPos = localPlayer.Position;
             Vector3 targetPos = target.Position;
@@ -68,26 +61,25 @@ internal sealed class FanDance4Module : IDisposable {
                 color = Vector4FromRGBA(0x563396C8),
                 thicc = 10,
                 radius = 0
-              }, new[] { -1, OnTerritoryChange });
-              _debugState.DebugMessage = $"Working...";
+              }, (long[])[ -1L, OnTerritoryChange ]);
+              DebugState.DebugMessage = "Working...";
             } else {
-              _debugState.DebugMessage = $"pl:({playerPos.X},{playerPos.Z},{playerPos.Y})\nta:({targetPos.X},{targetPos.Z},{playerPos.Y})";
+              DebugState.DebugMessage = $"pl:({playerPos.X},{playerPos.Z},{playerPos.Y})\nta:({targetPos.X},{targetPos.Z},{playerPos.Y})";
             }
           } else {
-            _debugState.DebugMessage = "target is null";
+            DebugState.DebugMessage = "target is null";
           }
         } else {
-          _debugState.DebugMessage = "localPlayer is null";
+          DebugState.DebugMessage = "localPlayer is null";
         }
       } else {
-        _debugState.DebugMessage = "Not Enabled";
+        DebugState.DebugMessage = "Not Enabled";
       }
     } catch (Exception e) {
       // not relevant
-      _debugState.DebugMessage = $"Could not create splatoon element {ToLayerName()}";
-      _debugState.SetFromException(e);
+      DebugState.DebugMessage = $"Could not create splatoon element {ToLayerName()}";
+      DebugState.SetFromException(e);
     }
-    //}
   }
 
   private string ToLayerName() {
@@ -95,7 +87,7 @@ internal sealed class FanDance4Module : IDisposable {
   }
 
   private void Disconnect() {
-    Services.Framework.Update -= Update;
+    Svc.Framework.Update -= Update;
   }
 
   public void CheckConnected() {
@@ -104,27 +96,15 @@ internal sealed class FanDance4Module : IDisposable {
     }
   }
 
-  public void Dispose() {
-    Dispose(true);
-    GC.SuppressFinalize(this);
-  }
-
-  private bool _isDisposed;
-
-  private void Dispose(bool disposing) {
-    if (disposing && !_isDisposed) {
-      Services.PluginLog.Information("Disposing splatoon rendered");
-      try {
-        Splatoon.RemoveDynamicElements(ToLayerName());
-        Disconnect();
-      } catch (Exception exception) {
-        if (Services.PluginLog.MinimumLogLevel == LogEventLevel.Debug) {
-          Services.PluginLog.Error(exception, "Failed to dispose of splatoon.");
-        }
+  internal override void DisposeManaged() {
+    Svc.Log.Information("Disposing splatoon rendered");
+    try {
+      Splatoon.RemoveDynamicElements(ToLayerName());
+      Disconnect();
+    } catch (Exception exception) {
+      if (Svc.Log.MinimumLogLevel == LogEventLevel.Debug) {
+        Svc.Log.Error(exception, "Failed to dispose of splatoon.");
       }
-      _isDisposed = true;
-
-      //ECommonsMain.Dispose();
     }
   }
 }

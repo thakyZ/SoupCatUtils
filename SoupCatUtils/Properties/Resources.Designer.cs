@@ -7,11 +7,11 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using System;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Properties {
-    using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -23,15 +23,15 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Properties {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
-        
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Resources() {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -45,7 +45,7 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Properties {
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -57,6 +57,78 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Collectables_CarbunclePlushyJS_Template {
+            get {
+                return ResourceManager.GetString("Collectables_CarbunclePlushyJS_Template", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Collectables_FFXIVCollectJS_Crafter_Template {
+            get {
+                return ResourceManager.GetString("Collectables_FFXIVCollectJS-Crafter_Template", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Collectables_FFXIVCollectJS_Fisher_Template {
+            get {
+                return ResourceManager.GetString("Collectables_FFXIVCollectJS-Fisher_Template", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Collectables_FFXIVCollectJS_Gather_Template {
+            get {
+                return ResourceManager.GetString("Collectables_FFXIVCollectJS-Gather_Template", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Collectables_FFXIVTeamCraft_Crafter_Template {
+            get {
+                return ResourceManager.GetString("Collectables_FFXIVTeamCraft-Crafter_Template", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Collectables_FFXIVTeamCraft_Fisher_Template {
+            get {
+                return ResourceManager.GetString("Collectables_FFXIVTeamCraft-Fisher_Template", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Collectables_FFXIVTeamCraft_Gather_Template {
+            get {
+                return ResourceManager.GetString("Collectables_FFXIVTeamCraft-Gather_Template", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Collectables_LalachievementsJS_Template {
+            get {
+                return ResourceManager.GetString("Collectables_LalachievementsJS_Template", resourceCulture);
             }
         }
     }

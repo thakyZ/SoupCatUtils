@@ -1,40 +1,33 @@
-using System;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Numerics;
 
 using ImGuiNET;
 
+using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Modules;
 using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI.Data;
-using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
-public class HousingSection : SectionBase, IDisposable {
-  public new string Name { get; set; } = "Housing##SoupCatUtils";
-  protected override string NameImplementation {
-    get { return Name; }
-  }
+public class HousingSection : SectionBase {
+  internal override string Name => "Housing Tools##SoupCatUtils";
 
-  public new void Dispose() {
-    Dispose(true);
-    GC.SuppressFinalize(this);
-  }
-
-  private bool _isDisposed;
-
-  protected new void Dispose(bool disposing) {
-    if (!_isDisposed && disposing) {
-      _isDisposed = true;
-    }
-  }
-
-  private DataTable? housingData = null;
+  private DataTable? housingData;
 
   private bool DataLoaded => housingData is not null && housingData.Rows.Count != 0;
 
   private void LoadData() {
     if (!DataLoaded) {
-      housingData = Services.Tools.Housing.GetHousingPlotPrices();
+      housingData = System.Modules.Get<Housing>()?.GetHousingPlotPrices();
     }
+  }
+
+  public override void Dispose() {
+    housingData?.Dispose();
+    GC.SuppressFinalize(this);
+  }
+
+  public override void FrameworkUpdate() {
   }
 
   private void ClearData() {
@@ -65,8 +58,10 @@ public class HousingSection : SectionBase, IDisposable {
     return !output;
   }
 
+  [SuppressMessage("Minor Code Smell", "S3267:Loops should be simplified with \"LINQ\" expressions", Justification = "<Pending>")]
   public void DrawTableData() {
-    foreach (DataRow row in housingData!.Rows) {
+    if (housingData is null) return;
+    foreach (DataRow row in housingData.Rows) {
       if (TestRow(row)) {
         ImGui.Text($"{(uint)row["index"]}");
         ImGui.TableNextColumn();
@@ -83,9 +78,10 @@ public class HousingSection : SectionBase, IDisposable {
     }
   }
 
+  [SuppressMessage("Minor Code Smell", "S3267:Loops should be simplified with \"LINQ\" expressions", Justification = "<Pending>")]
   public void DrawDataFilter(float itemSizes = 0.0f) {
     ImGui.SetNextItemWidth(itemSizes);
-    if (ImGui.BeginCombo($"District##DataFilter", DataFilter.Get().districtDataFilter)) {
+    if (ImGui.BeginCombo("District##DataFilter", DataFilter.Get().districtDataFilter)) {
       foreach (var district in DataFilter.GetRange(nameof(DataFilter.districtDataFilter))) {
         if (ImGui.Selectable($"{district}##district-DataFilter-{district.ToPascalCase()}", DataFilter.Get().districtDataFilter == district)) {
           DataFilter.Get().districtDataFilter = district;
@@ -135,7 +131,7 @@ public class HousingSection : SectionBase, IDisposable {
   }
 
   public override void Draw() {
-    CreateTitle("Housing Tools");
+    base.Draw();
 
     ImGui.SameLine();
 
@@ -149,7 +145,7 @@ public class HousingSection : SectionBase, IDisposable {
       ClearData();
     }
 
-    if (DataLoaded && ImGui.BeginChild("##DataFilter", new System.Numerics.Vector2(ImGui.GetWindowWidth() - (ImGui.GetStyle().WindowPadding.X * 2), 32.0f))) {
+    if (DataLoaded && ImGui.BeginChild("##DataFilter", new Vector2(ImGui.GetWindowWidth() - (ImGui.GetStyle().WindowPadding.X * 2), 32.0f))) {
       DrawDataFilter((ImGui.GetWindowWidth() - (ImGui.GetStyle().WindowPadding.X * 2)) / 4);
       ImGui.EndChild();
     }
@@ -162,8 +158,5 @@ public class HousingSection : SectionBase, IDisposable {
       }
       ImGui.EndTable();
     }
-  }
-
-  protected override void DisposeImpl() {
   }
 }

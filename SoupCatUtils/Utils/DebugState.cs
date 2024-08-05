@@ -1,6 +1,5 @@
-using System;
-
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
+
 internal sealed class DebugState {
   public string? DebugMessage { get; set; }
   public string? ErrorMessage { get; set; }

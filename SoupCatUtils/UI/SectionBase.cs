@@ -1,69 +1,53 @@
-using System;
-
 using ImGuiNET;
+
+using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Modules;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
 
 public abstract class SectionBase : IDisposable {
-  public string Name { get { return NameImplementation; } }
-  protected abstract string NameImplementation { get; }
+  internal abstract string Name { get; }
+  internal string DisplayName => Name.Split("##")[0];
 
   public virtual void Draw() {
-
+    CreateTitle(h2: DisplayName);
   }
 
-  protected abstract void DisposeImpl();
+  public abstract void Dispose();
 
-  private bool _isDisposed;
+  public abstract void FrameworkUpdate();
 
-  public void Dispose(bool disposing) {
-    if (!_isDisposed && disposing) {
-      DisposeImpl();
-      _isDisposed = true;
-    }
-  }
-
-  public void Dispose() {
-    this.Dispose(true);
-    GC.SuppressFinalize(this);
-  }
-
-  public virtual void FrameworkUpdate() {
-
-  }
-
-  public static void CreateTitle(string h1, string h2 = "", string h3 = "") {
+  public static void CreateTitle(string h1 = "", string h2 = "", string h3 = "") {
     float baseCursorPos = ImGui.GetCursorPosY();
-    Services.FontContainer.PushFont("AXIS", 36);
-    ImGui.Text(h1);
-    ImGui.PopFont();
+    if (h1 != string.Empty) {
+      using (var _ = FontContainer.PushFont("AXIS_36")) {
+        ImGui.Text(h1);
+      }
+    }
 
     if (h2 != string.Empty) {
-      ImGui.SameLine();
-      ImGui.Spacing();
-      ImGui.SameLine();
-
-      Services.FontContainer.PushFont("AXIS", 18);
-      ImGui.SetCursorPosY(baseCursorPos + (36 - 17));
-      ImGui.Text(h2);
-      ImGui.PopFont();
-
-      if (h3 != string.Empty) {
+      if (h1 != string.Empty) {
         ImGui.SameLine();
         ImGui.Spacing();
         ImGui.SameLine();
+      }
 
-        Services.FontContainer.PushFont("AXIS", 12);
-        ImGui.SetCursorPosY(baseCursorPos + (36 - 10));
-        ImGui.Text(h3);
-        ImGui.PopFont();
+      using (var _ = FontContainer.PushFont("AXIS_18")) {
+        ImGui.SetCursorPosY(baseCursorPos + (36 - 17));
+        ImGui.Text(h2);
       }
     }
-  }
 
-  public static void CreateTitle(string h2 = "") {
-    Services.FontContainer.PushFont("AXIS", 18);
-    ImGui.Text(h2);
-    ImGui.PopFont();
+    if (h3 != string.Empty) {
+      if (h2 != string.Empty || h1 != string.Empty) {
+        ImGui.SameLine();
+        ImGui.Spacing();
+        ImGui.SameLine();
+      }
+
+      using (var _ = FontContainer.PushFont("AXIS_12")) {
+        ImGui.SetCursorPosY(baseCursorPos + (36 - 10));
+        ImGui.Text(h3);
+      }
+    }
   }
 }

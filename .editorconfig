@@ -8,8 +8,8 @@ root = true
 indent_style = space
 # VS Spelling Configuration
 vsspell_section_id = 22aeebb9066147df915c0bfc9b6943f3
-vsspell_dictionary_languages_22aeebb9066147df915c0bfc9b6943f3 = inherited,en-US
-vsspell_ignored_words_22aeebb9066147df915c0bfc9b6943f3 = Splatoon
+vsspell_dictionary_languages_22aeebb9066147df915c0bfc9b6943f3 = inherited,en-US,en-US_FFXIV
+vsspell_ignored_words_22aeebb9066147df915c0bfc9b6943f3 = GameInteropProvider|Splatoon|Interop|ContentFiles|BuildTransitive
 vsspell_exclusion_expressions_22aeebb9066147df915c0bfc9b6943f3 = \w+Impl(?@@PND@@/Options/IgnoreCase, Singleline)
 
 # XML project files
@@ -185,7 +185,7 @@ dotnet_diagnostic.IDE0058.severity = silent
 
 # CA1822: Mark members as static
 dotnet_diagnostic.CA1822.severity = silent
+
 [.editorconfig]
 vsspell_section_id = 1d387178c2ab4cbdae7b375cf91125e4
 vsspell_ignored_words_1d387178c2ab4cbdae7b375cf91125e4 = readonly|usings
-

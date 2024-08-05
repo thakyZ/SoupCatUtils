@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <Target Name="PackagePluginPersonalRelease" AfterTargets="Build" Condition=" '$(Configuration)' == 'Debug' OR '$(Configuration)' == 'ILRepackTest' OR '$(Configuration)' == 'PersonalRelease' ">
+    <DalamudPackager
+      ProjectDir="$(ProjectDir)"
+      OutputPath="$(OutputPath)"
+      AssemblyName="$(AssemblyName)"
+      VersionComponents="4"
+      ManifestType="yaml"
+      MakeZip="False" />
+  </Target>
+  <Target Name="PackagePluginRelease" AfterTargets="Build" Condition=" '$(Configuration)' == 'Release' ">
+    <DalamudPackager
+      ProjectDir="$(ProjectDir)"
+      OutputPath="$(OutputPath)"
+      AssemblyName="$(AssemblyName)"
+      VersionComponents="4"
+      ManifestType="yaml"
+      MakeZip="True" />
+  </Target>
+</Project>
