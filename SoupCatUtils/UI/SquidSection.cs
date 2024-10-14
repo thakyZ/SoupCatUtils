@@ -1,7 +1,5 @@
 using System.Numerics;
-
 using ImGuiNET;
-
 using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Modules;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;

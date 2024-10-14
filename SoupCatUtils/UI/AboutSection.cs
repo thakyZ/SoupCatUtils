@@ -33,17 +33,17 @@ public class AboutSection : SectionBase {
     CreateTitle("About", Plugin.StaticName, $"by: {Plugin.StaticAuthor}");
     ImGui.Text("Misc Tools");
 
-    var _trackActions = this.TrackActions;
+    var _trackActions = TrackActions;
 
     if (ImGui.Checkbox("Track Actions used...", ref _trackActions)) {
-      this.TrackActions = _trackActions;
+      TrackActions = _trackActions;
 
       if (!_trackActions) {
         actionHandler?.ActionsTracked.Clear();
       }
     }
 
-    if (this.TrackActions && ImGui.BeginTable("ActionTrackTable", 3, ImGuiTableFlags.SizingStretchSame | ImGuiTableFlags.BordersOuter,
+    if (TrackActions && ImGui.BeginTable("ActionTrackTable", 3, ImGuiTableFlags.SizingStretchSame | ImGuiTableFlags.BordersOuter,
         new Vector2((ImGui.GetWindowWidth() - (ImGui.GetStyle().WindowPadding.X * 2)) * ImGuiHelpers.GlobalScale, (280 - (ImGui.GetStyle().WindowPadding.X * 2)) * ImGuiHelpers.GlobalScale))) {
       ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.NoSort);
       ImGui.TableSetupColumn("ID",   ImGuiTableColumnFlags.NoSort);

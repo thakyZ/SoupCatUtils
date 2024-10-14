@@ -1,4 +1,6 @@
 ﻿<Project Sdk="Dalamud.NET.Sdk/10.0.0">
+	<Import Project="Dalamud.Plugin.Bootstrap.targets"/>
+
   <PropertyGroup>
     <Company>Neko Boi Nick</Company>
     <Authors>Neko Boi Nick</Authors>
@@ -116,27 +118,29 @@
 
   <ItemGroup Condition=" '$(Configuration)' != 'Release' AND '$(Configuration)' != 'Debug' ">
     <!-- Hide the bin folder when configuration is set to "Debug" -->
-    <None Remove="bin\**" />
-    <Compile Remove="bin\**" />
-    <None Remove="bin\**" />
+    <None Remove="$(ProjectDir)bin\**" />
+    <Compile Remove="$(ProjectDir)bin\**" />
+    <None Remove="$(ProjectDir)bin\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <EditorConfigFiles Remove="$(SolutionDir)lib\.editorconfig" />
-    <None Include="$(SolutionDir)lib\.editorconfig" Link="lib\.editorconfig" />
     <!-- Hide the bin folder when configuration is set to "Debug" -->
     <!-- Add git files to the IDE -->
     <Content Include="$(SolutionDir).gitignore" CopyToOutputDirectory="Never" />
     <Content Include="$(SolutionDir).gitattributes" CopyToOutputDirectory="Never" />
+    <Content Include="$(SolutionDir).github\workflows\build.yml" Link="build.yml" CopyToOutputDirectory="Never" />
+    <Content Include="$(SolutionDir)README.md" CopyToOutputDirectory="Never" />
+    <Content Include="$(SolutionDir)LICENSE" CopyToOutputDirectory="Never" />
     <!-- Add the main .editorconfig file to the IDE -->
-    <EditorConfigFiles Remove=".editorconfig" />
-    <None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
-    <Folder Include="Providers\" />
-    <Folder Include="Resources\" />
+    <EditorConfigFiles Remove="$(SolutionDir).editorconfig" />
+    <None Include="$(SolutionDir)lib\.editorconfig" Link=".editorconfig" />
+    <EditorConfigFiles Remove="$(SolutionDir)lib\.editorconfig" />
+    <None Include="$(SolutionDir)lib\.editorconfig" Link="lib\.editorconfig" />
     <!-- Add the resources for later use (They are not used at this moment) -->
-    <Folder Include="Resources\" />
-    <Compile Update="Properties\Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
-    <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
+    <Folder Include="$(ProjectDir)Providers\" />
+    <Folder Include="$(ProjectDir)Resources\" />
+    <Compile Update="$(ProjectDir)Properties\Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
+    <EmbeddedResource Update="$(ProjectDir)Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
   </ItemGroup>
 
   <!-- Clean the output directory of all loose unneeded files -->

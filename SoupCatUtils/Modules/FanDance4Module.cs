@@ -35,9 +35,9 @@ internal sealed class FanDance4Module : ModuleBase {
   }
 
   private static uint Vector4FromRGBA(uint rgba) {
-		var array = rgba.ToString("X4").SplitInParts(2).ToArray();
-		string hex = array[3] + array[2] + array[1] + array[0];
-		return Convert.ToUInt32(hex, 16);
+    var array = rgba.ToString("X4").SplitInParts(2).ToArray();
+    string hex = array[3] + array[2] + array[1] + array[0];
+    return Convert.ToUInt32(hex, 16);
   }
 
   internal override void Update(IFramework framework) {
@@ -64,7 +64,7 @@ internal sealed class FanDance4Module : ModuleBase {
               }, (long[])[ -1L, OnTerritoryChange ]);
               DebugState.DebugMessage = "Working...";
             } else {
-              DebugState.DebugMessage = $"pl:({playerPos.X},{playerPos.Z},{playerPos.Y})\nta:({targetPos.X},{targetPos.Z},{playerPos.Y})";
+              DebugState.DebugMessage = $"pl:({playerPos.X},{playerPos.Z},{playerPos.Y})\nta:({targetPos.X},{targetPos.Z},{targetPos.Y})";
             }
           } else {
             DebugState.DebugMessage = "target is null";
