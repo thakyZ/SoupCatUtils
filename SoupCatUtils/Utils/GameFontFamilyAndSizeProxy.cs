@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
 

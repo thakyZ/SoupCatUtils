@@ -2,7 +2,7 @@ using Dalamud.Hooking;
 using Dalamud.Plugin.Services;
 
 using Lumina.Excel;
-using Action = Lumina.Excel.GeneratedSheets.Action;
+using Action = Lumina.Excel.Sheets.Action;
 using Lumina.Data;
 
 using FFXIVClientStructs.FFXIV.Client.Game;
@@ -32,8 +32,8 @@ internal sealed class ActionHandler : ModuleBase {
   public unsafe delegate byte UseActionHandler(ActionManager* thisPtr, ActionType actionType, uint actionId, ulong targetId, uint extraParam, ActionManager.UseActionMode mode, uint comboRouteId, bool* outOptAreaTargeted);
 
   private string GetActionName(uint actionId) {
-    var foundActions = ActionsSheet?.Where((x) => x.RowId == actionId);
-    return foundActions?.Any() == true ? foundActions.First().Name : "empty";
+    IEnumerable<Action>? foundActions = ActionsSheet?.Where((x) => x.RowId == actionId);
+    return foundActions?.Any() == true ? foundActions.First().Name.ExtractText() : "empty";
   }
 
   private unsafe byte OnUseAction(ActionManager* actionManager, ActionType actionType, uint actionId, ulong targetId, uint extraParam, ActionManager.UseActionMode mode, uint comboRouteId, bool* outOptAreaTargeted) {

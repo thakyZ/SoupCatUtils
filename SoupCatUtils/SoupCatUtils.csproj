@@ -1,6 +1,4 @@
-﻿<Project Sdk="Dalamud.NET.Sdk/10.0.0">
-	<Import Project="Dalamud.Plugin.Bootstrap.targets"/>
-
+﻿<Project Sdk="Dalamud.NET.Sdk/11.0.0">
   <PropertyGroup>
     <Company>Neko Boi Nick</Company>
     <Authors>Neko Boi Nick</Authors>

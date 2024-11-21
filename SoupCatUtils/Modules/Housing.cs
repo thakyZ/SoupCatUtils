@@ -3,7 +3,7 @@ using System.Data;
 using Dalamud.Plugin.Services;
 
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Modules;
 
@@ -92,13 +92,12 @@ public class Housing : ModuleBase {
     DataRow dataRow;
     int index = 0;
     foreach (TerritoryTypes territoryType in territoryTypes) {
-      HousingLandSet? landSet = HousingLandSets.GetRow(TerritoryTypeIdToLandSetId(territoryType));
-      if (landSet is null) return dataTable;
+      HousingLandSet landSet = HousingLandSets.GetRow(TerritoryTypeIdToLandSetId(territoryType));
       for (int plotNumber = 0; plotNumber < 60; plotNumber++) {
         dataRow = dataTable.NewRow();
         string districtName = territoryType.ToDescriptionString();
-        byte? houseSize = landSet.PlotSize[plotNumber];
-        uint realPrice = landSet.InitialPrice[plotNumber];
+        byte? houseSize = landSet.LandSet[plotNumber].PlotSize;
+        uint realPrice = landSet.LandSet[plotNumber].InitialPrice;
         float housePriceMillions = realPrice / 1000000f;
         string houseSizeName = houseSize switch {
           0 => "Small",
