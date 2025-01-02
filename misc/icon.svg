@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+     xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:svg="http://www.w3.org/2000/svg"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:cc="http://creativecommons.org/ns#"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     width="512"
+     height="512"
+     viewBox="0 0 512 512"
+     fill="white"
+     id="icon"
+     version="1.1"
+     inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+     sodipodi:docname="icon.svg"
+     xml:space="preserve">
+  <title id="title">Soup Cat Icon</title>
+  <sodipodi:namedview id="namedview"
+                      shape-rendering="auto"
+                      inkscape:current-layer="ears"
+                      inkscape:document-units="px" />
+  <metadata id="metadata">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Neko Boi Nick</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:publisher>
+          <cc:Agent>
+            <dc:title>Neko Gaming</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:language>English</dc:language>
+        <dc:title>Soup Cat Icon</dc:title>
+        <dc:date>2024-12-13</dc:date>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>MIT</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>icon</rdf:li>
+            <rdf:li>soup</rdf:li>
+            <rdf:li>neko</rdf:li>
+            <rdf:li>cat</rdf:li>
+            <rdf:li>silly</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs id="defs" />
+  <g id="root"
+     style="display:inline"
+     inkscape:groupmode="layer"
+     inkscape:label="Icon">
+    <g id="base"
+       style="display:inline"
+       inkscape:groupmode="layer"
+       inkscape:label="base"
+       sodipodi:insensitive="true">
+      <path id="bottom"
+            inkscape:label="bottom"
+            sodipodi:nodetypes="czcc"
+            d="m 149.04287,447.85124 c 0,23.1687 -2.05856,64.14876 108.49007,64.14876 110.54863,0 105.63486,-39.41786 105.63486,-64.23908 z" />
+      <path id="bowl"
+            inkscape:label="bowl"
+            sodipodi:nodetypes="czczc"
+            d="m 29.659309,267.43978 c 0,0 21.855015,105.33268 228.384611,105.33268 206.5296,0 223.5529,-106.37146 223.5529,-106.37146 0,114.42352 -89.05884,208.82542 -226.59619,208.82542 -137.53735,0 -225.341321,-99.5149 -225.341321,-207.78664 z" />
+    </g>
+    <g id="top"
+       style="display:inline"
+       inkscape:groupmode="layer"
+       inkscape:label="top"
+       sodipodi:insensitive="true">
+      <path id="rim"
+            inkscape:label="rim"
+            d="m 252.42383,136.45312 c -164.6833,0 -222.787111,73.23018 -222.787111,111.3711 0,40.14932 53.036884,114.45898 225.341801,114.45898 172.30491,0 226.87304,-74.64313 226.87304,-113.4375 0,-44.13807 -64.74444,-112.39258 -229.42773,-112.39258 z m 4.31055,30.09376 c 86.96523,0 194.32421,36.37707 194.32421,81.85742 0,45.48034 -85.37709,83.46484 -195.96875,83.46484 -110.59166,0 -194.53123,-35.34546 -194.43359,-82.78711 0.09764,-47.44165 109.11289,-82.53515 196.07813,-82.53515 z" />
+    </g>
+    <g id="soup"
+       style="display:inline"
+       inkscape:groupmode="layer"
+       inkscape:label="soup"
+       sodipodi:insensitive="true">
+      <path id="broth"
+            sodipodi:nodetypes="zzzzz"
+            inkscape:label="broth"
+            d="m 76.599002,279.29731 c 0.321027,-44.28104 89.500438,-77.68295 176.322228,-77.68295 86.82179,0 182.10329,33.63942 182.10329,77.68295 0,44.04353 -49.80891,82.74137 -177.76749,82.74137 -127.95858,0 -180.979055,-38.46033 -180.658028,-82.74137 z" />
+    </g>
+    <g id="ears"
+       style="display:inline"
+       inkscape:groupmode="layer"
+       inkscape:label="ears">
+      <path id="right ear"
+            inkscape:label="right ear"
+            d="m 399.0683,45.372283 c 0,0 -39.45317,22.262774 -104.52424,92.676687 l 166.478,64.08914 c -0.22108,-0.7789 0.11229,-2.21525 -0.66965,-2.33835 C 431.70766,100.57245 399.0683,45.372283 399.0683,45.372283 Z m 5.85454,36.134029 c 32.17178,51.903238 34.07466,86.492888 34.04146,94.404788 -10.41805,-9.91237 -22.18176,-18.3235 -34.9464,-24.98708 z" />
+      <path id="left ear"
+            inkscape:label="left ear"
+            d="m 112.93176,45.372283 c 0,0 39.45317,22.262774 104.52424,92.676687 L 50.978,202.13811 c 0.22108,-0.7789 -0.11229,-2.21525 0.66965,-2.33835 C 80.2924,100.57245 112.93176,45.372283 112.93176,45.372283 Z m -5.85454,36.134029 C 74.90544,133.40955 73.00256,167.9992 73.03576,175.9111 c 10.41805,-9.91237 22.18176,-18.3235 34.9464,-24.98708 z" />
+    </g>
+  </g>
+</svg>

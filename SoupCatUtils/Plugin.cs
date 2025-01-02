@@ -22,17 +22,22 @@ public class Plugin : IDalamudPlugin {
   /// <summary>
   /// The private internal instance for the name of the plugin
   /// </summary>
-  public const string StaticName = "Soup Cat Utils";
+  private const string StaticName = "Soup Cat Utils";
 
   /// <summary>
-  /// The private internal instance for the name of the plugin
+  /// The private internal instance for the name of the plugin author
   /// </summary>
-  public const string StaticAuthor = "Neko Boi Nick";
+  private const string StaticAuthor = "Neko Boi Nick";
 
   /// <summary>
   /// The name of the plugin
   /// </summary>
-  public string Name => StaticName;
+  public static string Name => StaticName;
+
+  /// <summary>
+  /// The name of the plugin author
+  /// </summary>
+  public static string Author => StaticAuthor;
 
   /// <summary>
   /// The plugin's main command name.

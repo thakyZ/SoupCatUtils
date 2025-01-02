@@ -7,50 +7,59 @@ using ECommons;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Extensions;
 
+/// <summary>
+/// Extension methods for <see cref="GameFontFamilyAndSizeProxy" />
+/// </summary>
 internal static class GameFontFamilyAndSizeProxyExtensions {
-  public static string ToDescriptionString(this GameFontFamilyAndSizeProxy val) {
-    if (val.GetType().GetField(val.ToString())!.GetCustomAttributes(typeof(DescriptionAttribute), false) is not DescriptionAttribute[] attributes) {
-      return string.Empty;
-    } else if (attributes.Length > 0) {
-      return attributes[0].Description;
-    } else {
-      return string.Empty;
-    }
-  }
-  public static T GetEnumValueByDescription<T>(this string val) where T : Enum {
-    FieldInfo[] fields = typeof(T).GetFields(BindingFlags.Public | BindingFlags.Static);
-    var field = fields.SelectMany(f => f.GetCustomAttributes(typeof(DescriptionAttribute), false),
-      (f, a) => new { Field = f, Att = a })
-      .SingleOrDefault(a =>((DescriptionAttribute)a.Att).Description == val)!;
-    return field is null || field.Field.GetRawConstantValue() is null ? default! : (T)field.Field.GetRawConstantValue()!;
+  /// <summary>
+  /// Returns an instance of <see cref="GameFontFamilyAndSize" /> <see cref="Enum" /> from the provided <see cref="FontData" />.
+  /// </summary>
+  /// <param name="fontData">The provided <see cref="FontData" />.</param>
+  /// <returns>An instance of <see cref="GameFontFamilyAndSize" />.</returns>
+  public static GameFontFamilyAndSize GetFontFamilyAndSize(this FontData fontData) {
+    return $"{fontData.Name}_{fontData.Size}".GameFontFamilyAndSizeUnProxy();
   }
 
-  public static GameFontFamilyAndSize GetFontFamilyAndSize(this FontData val) {
-    return $"{val.Name}_{val.Size}".GameFontFamilyAndSizeUnProxy();
+  /// <summary>
+  ///  Returns an instance of <see cref="GameFontFamily" /> <see cref="Enum" /> from the provided <see cref="FontData" />.
+  /// </summary>
+  /// <param name="fontData">The provided <see cref="FontData" />.</param>
+  /// <returns>An instance of <see cref="GameFontFamily" />.</returns>
+  public static GameFontFamily GetFontFamily(this FontData fontData) {
+    return $"{fontData.Name}".GameFontFamilyUnProxy();
   }
 
-  public static GameFontFamily GetFontFamily(this FontData val) {
-    return $"{val.Name}".GameFontFamilyUnProxy();
-  }
-
-  public static GameFontFamilyAndSize UnProxy(this GameFontFamilyAndSizeProxy val) {
-    var toInt = (int)val;
+  /// <summary>
+  ///  Returns an instance of <see cref="GameFontFamilyAndSize" /> <see cref="Enum" /> from the provided <see cref="GameFontFamilyAndSizeProxy" />.
+  /// </summary>
+  /// <param name="proxy">The provided <see cref="GameFontFamilyAndSizeProxy" />.</param>
+  /// <returns>An instance of <see cref="GameFontFamilyAndSize" />.</returns>
+  public static GameFontFamilyAndSize UnProxy(this GameFontFamilyAndSizeProxy proxy) {
+    var toInt = (int)proxy;
     return (GameFontFamilyAndSize)toInt;
   }
 
-  public static GameFontFamily GameFontFamilyUnProxy(this string val) {
+  /// <summary>
+  /// Returns an instance of <see cref="GameFontFamily" /> <see cref="Enum" /> from the provided <see langword="string" /> value.
+  /// </summary>
+  /// <param name="string">The provided <see langword="string" /> value.</param>
+  /// <returns>An instance of <see cref="GameFontFamily" />.</returns>
+  public static GameFontFamily GameFontFamilyUnProxy(this string @string) {
     string[]         names = Enum.GetNames(typeof(GameFontFamily));
     GameFontFamily[] values = Enum.GetValues<GameFontFamily>();
-    return (GameFontFamily)(values.GetValue(names.IndexOf(x => x.Equals(val, StringComparison.OrdinalIgnoreCase))) ?? GameFontFamily.Axis);
+    return (GameFontFamily)(values.GetValue(names.IndexOf(x => x.Equals(@string, StringComparison.OrdinalIgnoreCase))) ?? GameFontFamily.Axis);
   }
 
-  public static GameFontFamilyAndSize GameFontFamilyAndSizeUnProxy(this string val) {
+  /// <summary>
+  /// Returns an instance of <see cref="GameFontFamilyAndSize" /> <see cref="Enum" /> from the provided <see langword="string" /> value.
+  /// </summary>
+  /// <param name="string">The provided <see langword="string" /> value.</param>
+  /// <returns>An instance of <see cref="GameFontFamily" />.</returns>
+  public static GameFontFamilyAndSize GameFontFamilyAndSizeUnProxy(this string @string) {
     FieldInfo[] fields = typeof(GameFontFamilyAndSizeProxy).GetFields(BindingFlags.Public | BindingFlags.Static);
     var field = fields.SelectMany(f => f.GetCustomAttributes(typeof(DescriptionAttribute), false),
       (f, a) => new { Field = f, Att = a })
-      .SingleOrDefault(a =>((DescriptionAttribute)a.Att).Description == val)!;
-    var isProxy = field is null || field.Field.GetRawConstantValue() is null ? default : (GameFontFamilyAndSizeProxy)field.Field.GetRawConstantValue()!;
-    var toInt = (int)isProxy;
-    return (GameFontFamilyAndSize)toInt;
+      .SingleOrDefault(a =>((DescriptionAttribute)a.Att).Description == @string)!;
+    return field is null || field.Field.GetRawConstantValue() is not GameFontFamilyAndSize gfmas ? default : gfmas;
   }
 }

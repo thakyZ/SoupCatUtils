@@ -11,18 +11,18 @@ using Dalamud.Interface.Utility;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Modules;
 
-public partial class FontContainer : ModuleBase {
+public class FontContainer : ModuleBase {
   private readonly Dictionary<string, IFontHandle> _imGuiFonts = [];
   private string[] _fontList;
 
-  public const string DalamudFontKey = "Dalamud Font";
-  public static readonly List<string> DefaultFontKeys = ["Expressway_24", "Expressway_20", "Expressway_16"];
-  public static string DefaultBigFontKey => DefaultFontKeys[0];
-  public static string DefaultMediumFontKey => DefaultFontKeys[1];
-  public static string DefaultSmallFontKey => DefaultFontKeys[2];
+  public const string DALAMUD_FONT_KEY = "Dalamud Font";
+  public static readonly List<string> _defaultFontKeys = ["Expressway_24", "Expressway_20", "Expressway_16"];
+  public static string DefaultBigFontKey => _defaultFontKeys[0];
+  public static string DefaultMediumFontKey => _defaultFontKeys[1];
+  public static string DefaultSmallFontKey => _defaultFontKeys[2];
 
   public FontContainer() : base(false) {
-    _fontList = [DalamudFontKey];
+    _fontList = [DALAMUD_FONT_KEY];
     this.BuildFonts(GetFontsFromEnum());
   }
 
@@ -35,7 +35,10 @@ public partial class FontContainer : ModuleBase {
       if (i >= Enum.GetValues(typeof(GameFontFamilyAndSize)).Length) {
         continue;
       }
-      var nameProcess = ((GameFontFamilyAndSizeProxy)i).ToDescriptionString().Split("_");
+      var nameProcess = ((GameFontFamilyAndSizeProxy)i).ToDescriptionString()?.Split("_");
+      if (nameProcess is null) {
+        continue;
+      }
       output.Add(new FontData(nameProcess[0], "", float.Parse(nameProcess[1]), false, false));
     }
     if (output.Count == 0) Svc.Log.Warning("Fonts from enum returned empty.");
@@ -83,13 +86,13 @@ public partial class FontContainer : ModuleBase {
       }
     }
 
-    _fontList = [DalamudFontKey, .._imGuiFonts.Keys];
+    _fontList = [DALAMUD_FONT_KEY, .._imGuiFonts.Keys];
   }
 
   public static FontData[] GetDefaultFontData() {
-    FontData[] defaults = new FontData[DefaultFontKeys.Count];
-    for (int i = 0; i < DefaultFontKeys.Count; i++) {
-      string[] splits = DefaultFontKeys[i].Split("_", StringSplitOptions.RemoveEmptyEntries);
+    FontData[] defaults = new FontData[_defaultFontKeys.Count];
+    for (int i = 0; i < _defaultFontKeys.Count; i++) {
+      string[] splits = _defaultFontKeys[i].Split("_", StringSplitOptions.RemoveEmptyEntries);
       if (splits.Length == 2 && int.TryParse(splits[1], out int size)) {
         defaults[i] = new(splits[0], $"{GetUserFontPath()}{splits[0]}.ttf", size, false, false);
       }
@@ -244,7 +247,4 @@ public partial class FontContainer : ModuleBase {
   internal override void DisposeManaged() {
     this.DisposeFontHandles();
   }
-
-  [GeneratedRegex("[\\d.]{1,3}pt$")]
-  private static partial Regex SizeStringRegex();
 }

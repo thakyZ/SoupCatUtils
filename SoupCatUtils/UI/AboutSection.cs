@@ -12,25 +12,25 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
 
 public class AboutSection : SectionBase {
   internal override string Name => "About##SoupCatUtils";
-  private bool trackActions = false;
-  private ActionHandler? actionHandler;
+  private bool _trackActions;
+  private ActionHandler? _actionHandler;
   internal bool TrackActions {
     get {
-      return this.trackActions;
+      return this._trackActions;
     }
     set {
-      trackActions = value;
+      _trackActions = value;
       if (value) {
-        actionHandler ??= new ActionHandler();
+        _actionHandler ??= new ActionHandler();
       } else {
-        actionHandler?.Dispose();
-        actionHandler = null;
+        _actionHandler?.Dispose();
+        _actionHandler = null;
       }
     }
   }
 
   public override void Draw() {
-    CreateTitle("About", Plugin.StaticName, $"by: {Plugin.StaticAuthor}");
+    CreateTitle("About", Plugin.Name, $"by: {Plugin.Author}");
     ImGui.Text("Misc Tools");
 
     var _trackActions = TrackActions;
@@ -39,7 +39,7 @@ public class AboutSection : SectionBase {
       TrackActions = _trackActions;
 
       if (!_trackActions) {
-        actionHandler?.ActionsTracked.Clear();
+        _actionHandler?.ActionsTracked.Clear();
       }
     }
 
@@ -49,7 +49,7 @@ public class AboutSection : SectionBase {
       ImGui.TableSetupColumn("ID",   ImGuiTableColumnFlags.NoSort);
       ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.NoSort);
       ImGui.TableHeadersRow();
-      foreach ((string name, uint rowId, ActionType actionType) in actionHandler?.ActionsTracked ?? []) {
+      foreach ((string name, uint rowId, ActionType actionType) in _actionHandler?.ActionsTracked ?? []) {
         ImGui.TableNextRow();
         ImGui.TableNextColumn();
         ImGui.Text(name);

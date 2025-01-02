@@ -11,20 +11,14 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
 // It is good to have this be disposable in general, in case you ever need it to do any cleanup
 public class MainWindow : Window, IDisposable {
   private static ImGuiWindowFlags WindowFlags { get => ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse; }
-  public static string Name { get => $"{Plugin.StaticName} Settings"; }
+  public static string Name { get => $"{Plugin.Name} Settings"; }
 
-  private readonly List<SectionBase> Sections;
+  private List<SectionBase> Sections { get; }
 
   public MainWindow() : base(Name, WindowFlags) {
     Size = new Vector2(630, 500) * ImGuiHelpers.GlobalScale;
     SizeCondition = ImGuiCond.Always;
-    Sections = [
-      new AboutSection(),
-      new HousingSection(),
-      new SquidSection(),
-      new TweaksSection(),
-      new CollectablesSection(),
-    ];
+    this.Sections = System.GenerateSectionBases();
   }
 
   public override void OnClose() {

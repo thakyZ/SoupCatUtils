@@ -12,7 +12,7 @@ internal sealed class Chat {
   public void Error(string e) {
     Svc.Chat.PrintChat(new XivChatEntry {
       Message = new SeStringBuilder()
-            .AddUiForeground($"[{Plugin.StaticName}] ", 16)
+            .AddUiForeground($"[{Plugin.Name}] ", 16)
             .AddText(e).Build(),
       Type = XivChatType.Urgent
     });
@@ -20,7 +20,7 @@ internal sealed class Chat {
 
   public void Message(string message) {
     Svc.Chat.Print(new SeStringBuilder()
-        .AddUiForeground($"[{Plugin.StaticName}] ", 57)
+        .AddUiForeground($"[{Plugin.Name}] ", 57)
         .AddText(message).Build());
   }
 

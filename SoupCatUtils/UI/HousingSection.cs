@@ -12,18 +12,18 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
 public class HousingSection : SectionBase {
   internal override string Name => "Housing Tools##SoupCatUtils";
 
-  private DataTable? housingData;
+  private DataTable? _housingData;
 
-  private bool DataLoaded => housingData is not null && housingData.Rows.Count != 0;
+  private bool DataLoaded => _housingData is not null && _housingData.Rows.Count != 0;
 
   private void LoadData() {
     if (!DataLoaded) {
-      housingData = System.Modules.Get<Housing>()?.GetHousingPlotPrices();
+      _housingData = System.Modules.Get<Housing>()?.GetHousingPlotPrices();
     }
   }
 
   public override void Dispose() {
-    housingData?.Dispose();
+    _housingData?.Dispose();
     GC.SuppressFinalize(this);
   }
 
@@ -31,7 +31,7 @@ public class HousingSection : SectionBase {
   }
 
   private void ClearData() {
-    housingData?.Clear();
+    _housingData?.Clear();
   }
 
   public void DrawTableHeaders() {
@@ -60,8 +60,8 @@ public class HousingSection : SectionBase {
 
   [SuppressMessage("Minor Code Smell", "S3267:Loops should be simplified with \"LINQ\" expressions", Justification = "<Pending>")]
   public void DrawTableData() {
-    if (housingData is null) return;
-    foreach (DataRow row in housingData.Rows) {
+    if (_housingData is null) return;
+    foreach (DataRow row in _housingData.Rows) {
       if (TestRow(row)) {
         ImGui.Text($"{(uint)row["index"]}");
         ImGui.TableNextColumn();

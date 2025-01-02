@@ -1,18 +1,15 @@
 using System.Data;
-
-using Dalamud.Plugin.Services;
-
 using Lumina.Excel;
 using Lumina.Excel.Sheets;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Modules;
 
 public class Housing : ModuleBase {
-  private readonly ExcelSheet<HousingLandSet>? HousingLandSets;
-  private readonly TerritoryTypes[] territoryTypes = [TerritoryTypes.Mist, TerritoryTypes.LavenderBeds, TerritoryTypes.Goblet, TerritoryTypes.Shirogane, TerritoryTypes.Empyreum];
+  private readonly ExcelSheet<HousingLandSet>? _housingLandSets;
+  private readonly TerritoryTypes[] _territoryTypes = [TerritoryTypes.Mist, TerritoryTypes.LavenderBeds, TerritoryTypes.Goblet, TerritoryTypes.Shirogane, TerritoryTypes.Empyreum];
 
   public Housing() : base(false) {
-    HousingLandSets = Svc.Data.GetExcelSheet<HousingLandSet>();
+    _housingLandSets = Svc.Data.GetExcelSheet<HousingLandSet>();
   }
 
   public static uint TerritoryTypeIdToLandSetId(TerritoryTypes val) {
@@ -86,16 +83,19 @@ public class Housing : ModuleBase {
 
   public DataTable GetHousingPlotPrices() {
     DataTable dataTable = InitDataTable("ffxivHousingData");
-    if (HousingLandSets is null) return dataTable;
+    if (_housingLandSets is null) return dataTable;
     DataSet dataSet = new DataSet();
     dataSet.Tables.Add(dataTable);
     DataRow dataRow;
     int index = 0;
-    foreach (TerritoryTypes territoryType in territoryTypes) {
-      HousingLandSet landSet = HousingLandSets.GetRow(TerritoryTypeIdToLandSetId(territoryType));
+    foreach (TerritoryTypes territoryType in _territoryTypes) {
+      HousingLandSet landSet = _housingLandSets.GetRow(TerritoryTypeIdToLandSetId(territoryType));
       for (int plotNumber = 0; plotNumber < 60; plotNumber++) {
         dataRow = dataTable.NewRow();
-        string districtName = territoryType.ToDescriptionString();
+        string? districtName = territoryType.ToDescriptionString();
+        if (districtName is null) {
+          continue;
+        }
         byte? houseSize = landSet.LandSet[plotNumber].PlotSize;
         uint realPrice = landSet.LandSet[plotNumber].InitialPrice;
         float housePriceMillions = realPrice / 1000000f;

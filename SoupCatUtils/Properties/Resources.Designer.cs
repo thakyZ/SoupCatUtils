@@ -63,72 +63,72 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Properties {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string Collectables_CarbunclePlushyJS_Template {
+        internal static string Collectibles_CarbunclePlushyJS_Template {
             get {
-                return ResourceManager.GetString("Collectables_CarbunclePlushyJS_Template", resourceCulture);
+                return ResourceManager.GetString("Collectibles_CarbunclePlushyJS_Template", resourceCulture);
             }
         }
 
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string Collectables_FFXIVCollectJS_Crafter_Template {
+        internal static string Collectibles_FFXIVCollectJS_Crafter_Template {
             get {
-                return ResourceManager.GetString("Collectables_FFXIVCollectJS-Crafter_Template", resourceCulture);
+                return ResourceManager.GetString("Collectibles_FFXIVCollectJS-Crafter_Template", resourceCulture);
             }
         }
 
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string Collectables_FFXIVCollectJS_Fisher_Template {
+        internal static string Collectibles_FFXIVCollectJS_Fisher_Template {
             get {
-                return ResourceManager.GetString("Collectables_FFXIVCollectJS-Fisher_Template", resourceCulture);
+                return ResourceManager.GetString("Collectibles_FFXIVCollectJS-Fisher_Template", resourceCulture);
             }
         }
 
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string Collectables_FFXIVCollectJS_Gather_Template {
+        internal static string Collectibles_FFXIVCollectJS_Gather_Template {
             get {
-                return ResourceManager.GetString("Collectables_FFXIVCollectJS-Gather_Template", resourceCulture);
+                return ResourceManager.GetString("Collectibles_FFXIVCollectJS-Gather_Template", resourceCulture);
             }
         }
 
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string Collectables_FFXIVTeamCraft_Crafter_Template {
+        internal static string Collectibles_FFXIVTeamCraft_Crafter_Template {
             get {
-                return ResourceManager.GetString("Collectables_FFXIVTeamCraft-Crafter_Template", resourceCulture);
+                return ResourceManager.GetString("Collectibles_FFXIVTeamCraft-Crafter_Template", resourceCulture);
             }
         }
 
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string Collectables_FFXIVTeamCraft_Fisher_Template {
+        internal static string Collectibles_FFXIVTeamCraft_Fisher_Template {
             get {
-                return ResourceManager.GetString("Collectables_FFXIVTeamCraft-Fisher_Template", resourceCulture);
+                return ResourceManager.GetString("Collectibles_FFXIVTeamCraft-Fisher_Template", resourceCulture);
             }
         }
 
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string Collectables_FFXIVTeamCraft_Gather_Template {
+        internal static string Collectibles_FFXIVTeamCraft_Gather_Template {
             get {
-                return ResourceManager.GetString("Collectables_FFXIVTeamCraft-Gather_Template", resourceCulture);
+                return ResourceManager.GetString("Collectibles_FFXIVTeamCraft-Gather_Template", resourceCulture);
             }
         }
 
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string Collectables_LalachievementsJS_Template {
+        internal static string Collectibles_LalachievementsJS_Template {
             get {
-                return ResourceManager.GetString("Collectables_LalachievementsJS_Template", resourceCulture);
+                return ResourceManager.GetString("Collectibles_LalachievementsJS_Template", resourceCulture);
             }
         }
     }

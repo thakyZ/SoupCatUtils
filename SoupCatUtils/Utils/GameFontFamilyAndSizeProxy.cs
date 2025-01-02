@@ -1,9 +1,11 @@
 using System.ComponentModel;
-
 using Lumina.Excel.Sheets;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
 
+/// <summary>
+/// Proxy class with description for the enum <see cref="GameFontFamilyAndSize" />.
+/// </summary>
 internal enum GameFontFamilyAndSizeProxy {
   /// <summary>
   /// Placeholder meaning unused.

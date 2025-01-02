@@ -7,7 +7,6 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Configuration;
 
 [Serializable]
 public class Config : IPluginConfiguration, INotifyPropertyChanged {
-
   public event PropertyChangedEventHandler? PropertyChanged;
 
   public void TriggerPropertyChangedEventHandler([CallerMemberName] string? propertyName = null) {

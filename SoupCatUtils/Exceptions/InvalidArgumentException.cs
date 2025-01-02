@@ -1,7 +1,8 @@
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Exceptions;
 
+[Serializable]
 public class InvalidArgumentException : Exception {
-  public string ArgumentName { get; }
+  public string? ArgumentName { get; }
 
   public InvalidArgumentException(string argument, string? message = "") : base(message) {
     ArgumentName = argument;
@@ -12,12 +13,11 @@ public class InvalidArgumentException : Exception {
   }
 
   [Obsolete("Use a constructor that passes an argument instead.")]
-  public InvalidArgumentException(string? message) : base(message) {
-    ArgumentName = string.Empty;
-  }
+  public InvalidArgumentException() : base("Invalid argument provided.") { }
 
   [Obsolete("Use a constructor that passes an argument instead.")]
-  public InvalidArgumentException(string? message, Exception? innerException) : base(message, innerException) {
-    ArgumentName = string.Empty;
-  }
+  public InvalidArgumentException(string? message) : base(message) { }
+
+  [Obsolete("Use a constructor that passes an argument instead.")]
+  public InvalidArgumentException(string? message, Exception? innerException) : base(message, innerException) { }
 }

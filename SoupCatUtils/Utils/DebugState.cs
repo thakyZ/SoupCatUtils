@@ -1,14 +1,14 @@
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Utils;
 
 internal sealed class DebugState {
-  private string? lastDebugMessage;
-  private string? debugMessage;
+  private string? _lastDebugMessage;
+  private string? _debugMessage;
   public string? DebugMessage {
-    get => debugMessage;
+    get => _debugMessage;
     set {
-      lastDebugMessage = debugMessage;
-      debugMessage = value;
-      if (lastDebugMessage != debugMessage && ErrorMessage is not null) {
+      _lastDebugMessage = _debugMessage;
+      _debugMessage = value;
+      if (_lastDebugMessage != _debugMessage && ErrorMessage is not null) {
         ErrorMessage = null;
       }
     }

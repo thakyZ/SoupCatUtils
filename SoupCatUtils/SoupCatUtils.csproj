@@ -1,4 +1,4 @@
-﻿<Project Sdk="Dalamud.NET.Sdk/11.0.0">
+<Project Sdk="Dalamud.NET.Sdk/11.0.0">
   <PropertyGroup>
     <Company>Neko Boi Nick</Company>
     <Authors>Neko Boi Nick</Authors>
@@ -19,32 +19,33 @@
     <PlatformTarget>x64</PlatformTarget>
     <Platforms>$(PlatformTarget)</Platforms>
     <Configurations>Release;Debug</Configurations>
-    <Nullable>Enable</Nullable>
-    <LangVersion>Latest</LangVersion>
-    <GenerateDependencyFile>False</GenerateDependencyFile>
-    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <Configurations>Debug;Release;ILRepackTest;PersonalRelease</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Label="Build">
     <OutputType>Library</OutputType>
-    <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>Full</DebugType>
-    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
-    <RestorePackagesWithLockFile>True</RestorePackagesWithLockFile>
-    <CopyLocalLockFileAssemblies>True</CopyLocalLockFileAssemblies>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <ErrorReport>prompt</ErrorReport>
+    <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
 
   <PropertyGroup Label="Feature">
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Version>1.0.0.2</Version>
   </PropertyGroup>
 
   <PropertyGroup>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <AutoGenerateBindingRedirects>True</AutoGenerateBindingRedirects>
-    <DalamudLibPath>$(AppData)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -65,23 +66,16 @@
     <OutputPath>$(SolutionDir)bin\$(Configuration)\</OutputPath>
     <BaseOutputPath>$(OutputPath)</BaseOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <Optimize>False</Optimize>
-    <DebugType>Full</DebugType>
-    <DebugSymbols>True</DebugSymbols>
-    <ErrorReport>Prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
+    <BuildDependsOn>$(BuildDependsOn);</BuildDependsOn>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'ILRepackTest' ">
     <AssemblyName>$(MSBuildProjectName)2</AssemblyName>
     <OutputPath>$(DalamudDevPlugins)\$(MSBuildProjectName)\</OutputPath>
     <BaseOutputPath>$(OutputPath)</BaseOutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <Optimize>False</Optimize>
-    <DebugType>Full</DebugType>
-    <DebugSymbols>True</DebugSymbols>
-    <ErrorReport>Prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <DefineConstants>xPersonalRelease;xDEBUG;DEBUG;TRACE</DefineConstants>
+    <Optimize>false</Optimize>
     <BuildDependsOn>$(BuildDependsOn);PostBuild-ILRepack;</BuildDependsOn>
   </PropertyGroup>
 
@@ -89,24 +83,18 @@
     <AssemblyName>$(MSBuildProjectName)2</AssemblyName>
     <OutputPath>$(DalamudDevPlugins)\$(MSBuildProjectName)\</OutputPath>
     <BaseOutputPath>$(OutputPath)</BaseOutputPath>
-    <DefineConstants>xPersonalRelease;TRACE</DefineConstants>
-    <Optimize>False</Optimize>
-    <DebugType>Full</DebugType>
-    <DebugSymbols>True</DebugSymbols>
-    <ErrorReport>Prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <DefineConstants>xPersonalRelease;xDEBUG;TRACE</DefineConstants>
+    <Optimize>false</Optimize>
+    <BuildDependsOn>$(BuildDependsOn);</BuildDependsOn>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
     <OutputPath>$(SolutionDir)bin\$(Configuration)\</OutputPath>
     <BaseOutputPath>$(OutputPath)</BaseOutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>True</Optimize>
-    <DebugType>Full</DebugType>
-    <DebugSymbols>True</DebugSymbols>
-    <ErrorReport>Prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <DefineConstants>xDEBUG;TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <BuildDependsOn>$(BuildDependsOn);</BuildDependsOn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -126,18 +114,18 @@
     <!-- Add git files to the IDE -->
     <Content Include="$(SolutionDir).gitignore" CopyToOutputDirectory="Never" />
     <Content Include="$(SolutionDir).gitattributes" CopyToOutputDirectory="Never" />
-    <Content Include="$(SolutionDir).github\workflows\build.yml" Link="build.yml" CopyToOutputDirectory="Never" />
+    <Content Include="$(SolutionDir).github\workflows\build.yml" Link="build.yml" CopyToOutputDirectory="Never" Condition="Exists('$(SolutionDir).github\workflows\build.yml')" />
     <Content Include="$(SolutionDir)README.md" CopyToOutputDirectory="Never" />
-    <Content Include="$(SolutionDir)LICENSE" CopyToOutputDirectory="Never" />
     <!-- Add the main .editorconfig file to the IDE -->
     <EditorConfigFiles Remove="$(SolutionDir).editorconfig" />
     <None Include="$(SolutionDir)lib\.editorconfig" Link=".editorconfig" />
     <EditorConfigFiles Remove="$(SolutionDir)lib\.editorconfig" />
     <None Include="$(SolutionDir)lib\.editorconfig" Link="lib\.editorconfig" />
+    <None Include=".editorconfig" />
     <!-- Add the resources for later use (They are not used at this moment) -->
     <Folder Include="$(ProjectDir)Providers\" />
     <Folder Include="$(ProjectDir)Resources\" />
-    <Compile Update="$(ProjectDir)Properties\Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
+    <Compile Update="$(ProjectDir)Properties\Resources.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Resources.resx" />
     <EmbeddedResource Update="$(ProjectDir)Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
   </ItemGroup>
 

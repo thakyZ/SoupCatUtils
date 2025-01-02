@@ -5,31 +5,31 @@ using Dalamud.Plugin.Services;
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Modules;
 
 public class States : ModuleBase {
-  private State _state { get; set; } = State.None;
+  private State State { get; set; } = State.None;
 
   public States() : base(true) { }
 
   public bool this[State state] {
     get {
-      return (_state & state) != 0;
+      return (State & state) != 0;
     }
   }
 
   internal override void Update(IFramework framework) {
-    if (Svc.Condition[ConditionFlag.PreparingToCraft] && (_state & State.IsCraftingLogOpen) == 0) {
-      _state |= State.IsCraftingLogOpen;
-    } else if (!Svc.Condition[ConditionFlag.PreparingToCraft] && (_state & State.IsCraftingLogOpen) != 0) {
-      _state &= ~State.IsCraftingLogOpen;
+    if (Svc.Condition[ConditionFlag.PreparingToCraft] && (State & State.IsCraftingLogOpen) == 0) {
+      State |= State.IsCraftingLogOpen;
+    } else if (!Svc.Condition[ConditionFlag.PreparingToCraft] && (State & State.IsCraftingLogOpen) != 0) {
+      State &= ~State.IsCraftingLogOpen;
     }
-    if (Svc.GameGui.GetAddonByName("GatheringNote") != nint.Zero && (_state & State.IsFishingLogOpen) == 0) {
-      _state |= State.IsGatheringLogOpen;
-    } else if (Svc.GameGui.GetAddonByName("GatheringNote") == nint.Zero && (_state & State.IsFishingLogOpen) != 0) {
-      _state &= ~State.IsGatheringLogOpen;
+    if (Svc.GameGui.GetAddonByName("GatheringNote") != nint.Zero && (State & State.IsFishingLogOpen) == 0) {
+      State |= State.IsGatheringLogOpen;
+    } else if (Svc.GameGui.GetAddonByName("GatheringNote") == nint.Zero && (State & State.IsFishingLogOpen) != 0) {
+      State &= ~State.IsGatheringLogOpen;
     }
-    if (Svc.GameGui.GetAddonByName("FishingGuide2") != nint.Zero && (_state & State.IsFishingLogOpen) == 0) {
-      _state |= State.IsFishingLogOpen;
-    } else if (Svc.GameGui.GetAddonByName("FishingGuide2") == nint.Zero && (_state & State.IsFishingLogOpen) != 0) {
-      _state &= ~State.IsFishingLogOpen;
+    if (Svc.GameGui.GetAddonByName("FishingGuide2") != nint.Zero && (State & State.IsFishingLogOpen) == 0) {
+      State |= State.IsFishingLogOpen;
+    } else if (Svc.GameGui.GetAddonByName("FishingGuide2") == nint.Zero && (State & State.IsFishingLogOpen) != 0) {
+      State &= ~State.IsFishingLogOpen;
     }
   }
 }

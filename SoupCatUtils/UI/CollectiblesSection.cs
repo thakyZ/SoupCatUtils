@@ -13,8 +13,8 @@ using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Exceptions;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
 
-public class CollectablesSection : SectionBase {
-  internal override string Name => "Collectables##SoupCatUtils";
+public class CollectiblesSection : SectionBase {
+  internal override string Name => "Collectibles##SoupCatUtils";
 
   internal enum WindowType {
     None = 0,
@@ -142,7 +142,7 @@ public class CollectablesSection : SectionBase {
     if (ImGui.Button("Copy FFXIV Collect JS")) {
       var data = GetDataFromWindow(WindowType.GatherWindow);
       if (data is not null) {
-        var processedTemplate = SetupTemplate("Collectables_FFXIVCollectJS-Gather_Template", data);
+        var processedTemplate = SetupTemplate("Collectibles_FFXIVCollectJS-Gather_Template", data);
         if (processedTemplate is not null) {
           ImGui.SetClipboardText(processedTemplate);
         }
@@ -152,7 +152,7 @@ public class CollectablesSection : SectionBase {
     if (ImGui.Button("Copy FFXIV TeamCraft JS")) {
       var data = GetDataFromWindow(WindowType.GatherWindow);
       if (data is not null) {
-        var processedTemplate = SetupTemplate("Collectables_FFXIVTeamCraft-Gather_Template", data);
+        var processedTemplate = SetupTemplate("Collectibles_FFXIVTeamCraft-Gather_Template", data);
         if (processedTemplate is not null) {
           ImGui.SetClipboardText(processedTemplate);
         }
@@ -166,7 +166,7 @@ public class CollectablesSection : SectionBase {
     if (ImGui.Button("Copy FFXIV Collect JS")) {
       var data = GetDataFromWindow(WindowType.FishingLog);
       if (data is not null) {
-        var processedTemplate = SetupTemplate("Collectables_FFXIVCollectJS-Fisher_Template", data);
+        var processedTemplate = SetupTemplate("Collectibles_FFXIVCollectJS-Fisher_Template", data);
         if (processedTemplate is not null) {
           ImGui.SetClipboardText(processedTemplate);
         }
@@ -176,7 +176,7 @@ public class CollectablesSection : SectionBase {
     if (ImGui.Button("Copy Lalachievements JS")) {
       var data = GetDataFromWindow(WindowType.FishingLog);
       if (data is not null) {
-        var processedTemplate = SetupTemplate("Collectables_LalachievementsJS_Template", data);
+        var processedTemplate = SetupTemplate("Collectibles_LalachievementsJS_Template", data);
         if (processedTemplate is not null) {
           ImGui.SetClipboardText(processedTemplate);
         }
@@ -186,7 +186,7 @@ public class CollectablesSection : SectionBase {
     if (ImGui.Button("Copy FFXIV TeamCraft JS")) {
       var data = GetDataFromWindow(WindowType.FishingLog);
       if (data is not null) {
-        var processedTemplate = SetupTemplate("Collectables_FFXIVTeamCraft-Gather_Template", data);
+        var processedTemplate = SetupTemplate("Collectibles_FFXIVTeamCraft-Gather_Template", data);
         if (processedTemplate is not null) {
           ImGui.SetClipboardText(processedTemplate);
         }
@@ -196,7 +196,7 @@ public class CollectablesSection : SectionBase {
     if (ImGui.Button("Copy Carbuncle Plushy JS")) {
       var data = GetDataFromWindow(WindowType.FishingLog);
       if (data is not null) {
-        var processedTemplate = SetupTemplate("Collectables_CarbunclePlushyJS_Template", data);
+        var processedTemplate = SetupTemplate("Collectibles_CarbunclePlushyJS_Template", data);
         if (processedTemplate is not null) {
           ImGui.SetClipboardText(processedTemplate);
         }
@@ -210,7 +210,7 @@ public class CollectablesSection : SectionBase {
     if (ImGui.Button("Copy FFXIV Collect JS")) {
       var data = GetDataFromWindow(WindowType.CraftingLog);
       if (data is not null) {
-        var processedTemplate = SetupTemplate("Collectables_FFXIVCollectJS-Crafter_Template", data);
+        var processedTemplate = SetupTemplate("Collectibles_FFXIVCollectJS-Crafter_Template", data);
         if (processedTemplate is not null) {
           ImGui.SetClipboardText(processedTemplate);
         }
@@ -220,7 +220,7 @@ public class CollectablesSection : SectionBase {
     if (ImGui.Button("Copy FFXIV TeamCraft JS")) {
       var data = GetDataFromWindow(WindowType.CraftingLog);
       if (data is not null) {
-        var processedTemplate = SetupTemplate("Collectables_FFXIVTeamCraft-Crafter_Template", data);
+        var processedTemplate = SetupTemplate("Collectibles_FFXIVTeamCraft-Crafter_Template", data);
         if (processedTemplate is not null) {
           ImGui.SetClipboardText(processedTemplate);
         }

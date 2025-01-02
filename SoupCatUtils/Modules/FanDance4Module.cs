@@ -13,11 +13,11 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Modules;
 internal sealed class FanDance4Module : ModuleBase {
   internal static DebugState DebugState { get; } = new();
 
-  private const float MaxDistance = 15f;
-  private const long OnTerritoryChange = -2;
+  private const float _MAX_DISTANCE = 15f;
+  private const long _ON_TERRITORY_CHANGE = -2;
 
   private static class Buffs {
-    public const ushort FourFoldFanDance = 2699;
+    public const ushort FOUR_FOLD_FAN_DANCE = 2699;
   }
 
   public FanDance4Module() : base(true) {
@@ -50,7 +50,7 @@ internal sealed class FanDance4Module : ModuleBase {
           if (target is not null) {
             Vector3 playerPos = localPlayer.Position;
             Vector3 targetPos = target.Position;
-            if (localPlayer.StatusList.Any(x => x.StatusId == Buffs.FourFoldFanDance) && AreInRange(MaxDistance, playerPos, targetPos, localPlayer.HitboxRadius, target.HitboxRadius)) {
+            if (localPlayer.StatusList.Any(x => x.StatusId == Buffs.FOUR_FOLD_FAN_DANCE) && AreInRange(_MAX_DISTANCE, playerPos, targetPos, localPlayer.HitboxRadius, target.HitboxRadius)) {
               Splatoon.AddDynamicElement(ToLayerName(), new Element(ElementType.LineBetweenTwoFixedCoordinates) {
                 refX = playerPos.X,
                 refY = playerPos.Z, // z and y are swapped
@@ -61,7 +61,7 @@ internal sealed class FanDance4Module : ModuleBase {
                 color = Vector4FromRGBA(0x563396C8),
                 thicc = 10,
                 radius = 0
-              }, (long[])[ -1L, OnTerritoryChange ]);
+              }, [ -1L, _ON_TERRITORY_CHANGE ]);
               DebugState.DebugMessage = "Working...";
             } else {
               DebugState.DebugMessage = $"pl:({playerPos.X},{playerPos.Z},{playerPos.Y})\nta:({targetPos.X},{targetPos.Z},{targetPos.Y})";
