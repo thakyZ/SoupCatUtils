@@ -47,8 +47,8 @@ internal class PluginsSection : SectionBase {
   public override void Draw() {
     base.Draw();
     try {
-      this.DrawFilterCheckBox();
-      if (ImGui.BeginChild("##", ImGui.GetWindowSize(), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoDecoration)) {
+      //this.DrawFilterCheckBox();
+      if (ImGui.BeginChild("##", ImGui.GetWindowSize(), false, ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoDecoration)) {
         if (ImGui.BeginTable($"##Plugins-ScrollingArea-{nameof(SoupCatUtils)}", 4, ImGuiTableFlags.ScrollY)) {
           ImGui.TableSetupScrollFreeze(4, 1);
           ImGui.TableSetupColumn("Remote Plugin", ImGuiTableColumnFlags.WidthStretch, 150.0f);
@@ -56,7 +56,7 @@ internal class PluginsSection : SectionBase {
           ImGui.TableSetupColumn("Local Plugin", ImGuiTableColumnFlags.WidthStretch, 150.0f);
           ImGui.TableSetupColumn("Local Plugin Version", ImGuiTableColumnFlags.WidthStretch, 100.0f);
           ImGui.TableHeadersRow();
-          foreach (var (nonDev, dev) in this.PluginDevMap) {
+          foreach ((IExposedPlugin? nonDev, IExposedPlugin? dev) in this.PluginDevMap) {
             try {
               ImGui.TableNextColumn();
               ImGui.Text(nonDev?.Name.ToString("Unknown Remote Plugin"));
@@ -99,11 +99,7 @@ internal class PluginsSection : SectionBase {
     var build = InternalCompare(first.Build, second.Build);
     var revision = InternalCompare(first.Revision, second.Revision);
 
-    if (major == direction || minor == direction || build == direction || revision == direction) {
-      return true;
-    }
-
-    return false;
+    return major == direction || minor == direction || build == direction || revision == direction;
 
     static int InternalCompare(int f, int s) {
       if ((f == 0 && s == -1) || (f == -1 && s == 0)) {
