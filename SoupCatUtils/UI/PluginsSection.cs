@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Style;
 using Dalamud.Interface.Utility;
@@ -38,9 +39,9 @@ internal class PluginsSection : SectionBase {
   private void DrawFilterCheckBox() {
     var oldPosition = ImGui.GetCursorPos();
     ImGui.SetCursorPos(oldPosition * 10);
-    if (ImGuiEx.SmallIconButton(FontAwesomeIcon) {
+    //if (ImGuiEx.SmallIconButton(FontAwesomeIcon.Ad) {
 
-    }
+    //}
   }
 
   public override void Draw() {
