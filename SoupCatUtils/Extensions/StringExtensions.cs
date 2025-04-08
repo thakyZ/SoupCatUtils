@@ -23,48 +23,48 @@ public static partial class StringExtensions {
   /// The fallback <see langword="string"/> if <typeparamref name="TSource"/> is <see langword="null"/>; otherwise the
   /// <see cref="object.ToString()"/> method's return value..
   /// </returns>
-  [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  public static string ToString<TSource>(this TSource? @object, string fallback)
+  public static string ToString<TSource>(this TSource? @object, string fallback) where TSource : class
     => @object?.ToString() ?? fallback;
 
-  /// <summary>
-  /// Returns the <see cref="object.ToString()"/> method unless it is <see langword="null"/> where it will use the fallback
-  /// <see cref="object.ToString()"/> method instead, and if that is <see langword="null"/> will return a
-  /// <see langword="string"/> containing <c>"null"</c>.
-  /// </summary>
-  /// <typeparam name="TSource">Any type param allowing <see langword="null"/>.</typeparam>
-  /// <param name="object">The <typeparamref name="TSource"/> to return as a <see langword="string"/>.</param>
-  /// <param name="fallback">
-  /// The fallback <see langword="object"/> if <paramref name="object"/> is <see langword="null"/>.
-  /// </param>
-  /// <returns>
-  /// The fallback <typeparamref name="TSource"/>'s <see cref="object.ToString()"/> method's return value if
-  /// <typeparamref name="TSource"/> is <see langword="null"/>; otherwise the <see cref="object.ToString()"/> method's return
-  /// value.
-  /// </returns>
-  [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  public static string ToString<TSource>(this TSource? @object, TSource fallback)
-    => @object?.ToString() ?? fallback.ToString("null");
+  public static string ToString(this string? @string, string fallback)
+    => @string ?? fallback;
 
-  /// <summary>
-  /// Returns the <see cref="object.ToString()"/> method unless it is <see langword="null"/> where it will use the fallback
-  /// <see cref="object.ToString()"/> method instead, and if that is <see langword="null"/> will return a
-  /// <see langword="string"/> containing <c>"null"</c>.
-  /// </summary>
-  /// <typeparam name="TSource">Any type param allowing <see langword="null"/>.</typeparam>
-  /// <typeparam name="TFallback">Any type param however not <see langword="null"/>.</typeparam>
-  /// <param name="object">The <typeparamref name="TSource"/> to return as a <see langword="string"/>.</param>
-  /// <param name="fallback">
-  /// The fallback <see langword="object"/> if <paramref name="object"/> is <see langword="null"/>.
-  /// </param>
-  /// <returns>
-  /// The fallback <typeparamref name="TFallback"/>'s <see cref="object.ToString()"/> method's return value if
-  /// <typeparamref name="TSource"/> is <see langword="null"/>; otherwise the <see cref="object.ToString()"/> method's return
-  /// value.
-  /// </returns>
-  [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  public static string ToString<TSource, TFallback>(this TSource? @object, TFallback fallback) where TFallback : notnull
-    => @object?.ToString() ?? fallback.ToString("null");
+  ///// <summary>
+  ///// Returns the <see cref="object.ToString()"/> method unless it is <see langword="null"/> where it will use the fallback
+  ///// <see cref="object.ToString()"/> method instead, and if that is <see langword="null"/> will return a
+  ///// <see langword="string"/> containing <c>"null"</c>.
+  ///// </summary>
+  ///// <typeparam name="TSource">Any type param allowing <see langword="null"/>.</typeparam>
+  ///// <param name="object">The <typeparamref name="TSource"/> to return as a <see langword="string"/>.</param>
+  ///// <param name="fallback">
+  ///// The fallback <see langword="object"/> if <paramref name="object"/> is <see langword="null"/>.
+  ///// </param>
+  ///// <returns>
+  ///// The fallback <typeparamref name="TSource"/>'s <see cref="object.ToString()"/> method's return value if
+  ///// <typeparamref name="TSource"/> is <see langword="null"/>; otherwise the <see cref="object.ToString()"/> method's return
+  ///// value.
+  ///// </returns>
+  //public static string ToString<TSource>(this TSource? @object, TSource fallback) where TSource : class
+  //  => @object?.ToString() ?? fallback.ToString("null");
+
+  ///// <summary>
+  ///// Returns the <see cref="object.ToString()"/> method unless it is <see langword="null"/> where it will use the fallback
+  ///// <see cref="object.ToString()"/> method instead, and if that is <see langword="null"/> will return a
+  ///// <see langword="string"/> containing <c>"null"</c>.
+  ///// </summary>
+  ///// <typeparam name="TSource">Any type param allowing <see langword="null"/>.</typeparam>
+  ///// <typeparam name="TFallback">Any type param however not <see langword="null"/>.</typeparam>
+  ///// <param name="object">The <typeparamref name="TSource"/> to return as a <see langword="string"/>.</param>
+  ///// <param name="fallback">
+  ///// The fallback <see langword="object"/> if <paramref name="object"/> is <see langword="null"/>.
+  ///// </param>
+  ///// <returns>
+  ///// The fallback <typeparamref name="TFallback"/>'s <see cref="object.ToString()"/> method's return value if
+  ///// <typeparamref name="TSource"/> is <see langword="null"/>; otherwise the <see cref="object.ToString()"/> method's return
+  ///// value.
+  ///// </returns>
+  //public static string ToString<TSource, TFallback>(this TSource? @object, [NotNull] TFallback fallback) where TSource : class where TFallback : class
+  //  => @object?.ToString() ?? fallback.ToString("null");
 
   /// <summary>
   /// Indicates whether the specified string is <see langword="null"/> or an empty string ("").

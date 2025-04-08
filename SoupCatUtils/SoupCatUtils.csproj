@@ -1,6 +1,5 @@
 <Project Sdk="Dalamud.NET.Sdk/11.0.0">
   <PropertyGroup>
-    <Company>Neko Boi Nick</Company>
     <Authors>Neko Boi Nick</Authors>
     <Description>
       Allows any number of mounts to be enabled for the mount roulette, instead of having to choose between the
@@ -49,52 +48,62 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <Company>$(Authors)</Company>
     <AssemblyTitle>$(Title)</AssemblyTitle>
     <Product>$(Title)</Product>
     <PluginVersion>$(Version)</PluginVersion>
     <FileVersion>$(Version)</FileVersion>
     <AssemblyVersion>$(Version)</AssemblyVersion>
-    <BuildDependsOn>
-      PreBuild-MSBuildTasks;
-      $(BuildDependsOn);
-      AfterBuild
-    </BuildDependsOn>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+  <PropertyGroup>
+    <DefineConstants>TRACE</DefineConstants>
+    <BuildDependsOn>PreBuild-MSBuildTasks;$(BuildDependsOn);AfterBuild</BuildDependsOn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' OR '$(Configuration)' == 'ILRepackTest' OR '$(Configuration)' == 'PersonalRelease' ">
+    <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'ILRepackTest' OR '$(Configuration)' == 'PersonalRelease' ">
+    <DefineConstants>$(DefineConstants);xDEBUG</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'PersonalRelease' ">
+    <DefineConstants>$(DefineConstants);xPersonalRelease</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' OR '$(Configuration)' == 'Release' ">
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <BaseOutputPath>$(OutputPath)</BaseOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' OR '$(Configuration)' == 'Release' OR '$(Configuration)' == 'ILRepackTest' ">
     <OutputPath>$(SolutionDir)bin\$(Configuration)\</OutputPath>
     <BaseOutputPath>$(OutputPath)</BaseOutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <Optimize>false</Optimize>
-    <BuildDependsOn>$(BuildDependsOn);</BuildDependsOn>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'ILRepackTest' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'ILRepackTest' OR '$(Configuration)' == 'PersonalRelease' ">
     <AssemblyName>$(MSBuildProjectName)2</AssemblyName>
-    <OutputPath>$(DalamudDevPlugins)\$(MSBuildProjectName)\</OutputPath>
     <BaseOutputPath>$(OutputPath)</BaseOutputPath>
-    <DefineConstants>xPersonalRelease;xDEBUG;DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug' OR  '$(Configuration)' == 'ILRepackTest'">
     <Optimize>false</Optimize>
-    <BuildDependsOn>$(BuildDependsOn);PostBuild-ILRepack;</BuildDependsOn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release' OR  '$(Configuration)' == 'PersonalRelease'">
+    <Optimize>true</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'PersonalRelease' ">
     <AssemblyName>$(MSBuildProjectName)2</AssemblyName>
     <OutputPath>$(DalamudDevPlugins)\$(MSBuildProjectName)\</OutputPath>
     <BaseOutputPath>$(OutputPath)</BaseOutputPath>
-    <DefineConstants>xPersonalRelease;xDEBUG;TRACE</DefineConstants>
-    <Optimize>false</Optimize>
-    <BuildDependsOn>$(BuildDependsOn);</BuildDependsOn>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
-    <OutputPath>$(SolutionDir)bin\$(Configuration)\</OutputPath>
-    <BaseOutputPath>$(OutputPath)</BaseOutputPath>
-    <DefineConstants>xDEBUG;TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <BuildDependsOn>$(BuildDependsOn);</BuildDependsOn>
+  <PropertyGroup Condition=" '$(Configuration)' == 'ILRepackTest' ">
+    <BuildDependsOn>$(BuildDependsOn);PostBuild-ILRepack;</BuildDependsOn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -102,7 +111,7 @@
     <!-- <ProjectReference Include="$(SolutionDir)lib\OtterGui\OtterGui.csproj" /> -->
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(Configuration)' != 'Release' AND '$(Configuration)' != 'Debug' ">
+  <ItemGroup>
     <!-- Hide the bin folder when configuration is set to "Debug" -->
     <None Remove="$(ProjectDir)bin\**" />
     <Compile Remove="$(ProjectDir)bin\**" />
@@ -132,12 +141,14 @@
   <!-- Clean the output directory of all loose unneeded files -->
   <Target Name="CleanOutDir" AfterTargets="PackagePlugin">
     <ItemGroup>
-      <DeleteAssemblies Include="$(TargetDir)$(AssemblyName).deps.json" />
+      <DeleteLooseFiles Include="$(TargetDir)$(AssemblyName).deps.json" />
     </ItemGroup>
-    <Message Text="Deleting @(DeleteAssemblies)" Importance="high" />
-    <Delete Files="@(DeleteAssemblies)" />
-    <RemoveDir Directories="$(TargetDir)ref\" />
+    <Message Text="Deleting Loose Files" Importance="high" Condition=" '$(DeleteLooseFiles.Length)' != '0' " />
+    <Delete Files="@(DeleteLooseFiles)" Condition=" '$(DeleteLooseFiles.Length)' != '0' " />
+    <Message Text="Deleting $(TargetDir)ref\" Importance="high" Condition="Exists('$(TargetDir)ref\')" />
+    <RemoveDir Directories="$(TargetDir)ref\" Condition="Exists('$(TargetDir)ref\')" />
     <!-- Some libraries copy over a folder called "runtimes" that contain duplicates of binary files, so just remove anyways. -->
-    <RemoveDir Directories="$(TargetDir)runtimes\" />
+    <Message Text="Deleting $(TargetDir)runtimes\" Importance="high" Condition="Exists('$(TargetDir)ref\')" />
+    <RemoveDir Directories="$(TargetDir)runtimes\" Condition="Exists('$(TargetDir)runtimes\')" />
   </Target>
 </Project>

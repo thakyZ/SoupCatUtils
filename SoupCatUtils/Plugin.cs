@@ -22,27 +22,27 @@ public class Plugin : IDalamudPlugin {
   /// <summary>
   /// The private internal instance for the name of the plugin
   /// </summary>
-  private const string StaticName = "Soup Cat Utils";
+  private const string _STATIC_NAME = "Soup Cat Utils";
 
   /// <summary>
   /// The private internal instance for the name of the plugin author
   /// </summary>
-  private const string StaticAuthor = "Neko Boi Nick";
+  private const string _STATIC_AUTHOR = "Neko Boi Nick";
 
   /// <summary>
   /// The name of the plugin
   /// </summary>
-  public static string Name => StaticName;
+  public static string Name => _STATIC_NAME;
 
   /// <summary>
   /// The name of the plugin author
   /// </summary>
-  public static string Author => StaticAuthor;
+  public static string Author => _STATIC_AUTHOR;
 
   /// <summary>
   /// The plugin's main command name.
   /// </summary>
-  private const string CommandName = "/soupcat";
+  private const string _COMMAND_NAME = "/soupcat";
 
   public Plugin(IDalamudPluginInterface pluginInterface) {
     System.PluginInstance = this;
@@ -61,7 +61,7 @@ public class Plugin : IDalamudPlugin {
 
     System.WindowSystem.AddWindow(System.UI);
 
-    Svc.Commands.AddHandler(CommandName, new CommandInfo(OnCommand) {
+    Svc.Commands.AddHandler(_COMMAND_NAME, new CommandInfo(OnCommand) {
       HelpMessage = "The soup cat utilities command",
       ShowInHelp = true
     });
@@ -83,7 +83,7 @@ public class Plugin : IDalamudPlugin {
   }
 
   // private static IEnumerable<string>? _potionNamesIds;
-  private static IEnumerable<uint> _potionIds = [
+  private readonly static IEnumerable<uint> _potionIds = [
     4_551,  // Potion
     4_552,  // Hi-Potion
     4_553,  // Mega-Potion
@@ -92,7 +92,6 @@ public class Plugin : IDalamudPlugin {
     23_167, // Super-Potion
     38_956, // Hyper-Potion
   ];
-  private uint _retryItem = 0;
 
   private void BestPotionCommand(string command, string arguments) {
     Svc.Log.Information($"Ran {nameof(BestPotionCommand)}");
@@ -148,7 +147,7 @@ public class Plugin : IDalamudPlugin {
     System.WindowSystem.RemoveAllWindows();
     Svc.PluginInterface.UiBuilder.Draw -= DrawUI;
     Svc.PluginInterface.UiBuilder.OpenConfigUi -= DrawConfigUI;
-    Svc.Commands.RemoveHandler(CommandName);
+    Svc.Commands.RemoveHandler(_COMMAND_NAME);
     try {
       if (System.PluginConfig.EnableUseBestPotionCommand) {
         Svc.Log.Information($"RemoveHandler (dispose (if)) {nameof(BestPotionCommand)}");

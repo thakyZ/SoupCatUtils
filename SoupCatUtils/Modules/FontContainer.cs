@@ -58,12 +58,17 @@ public class FontContainer : ModuleBase {
       string path = string.IsNullOrEmpty(font.Path) ? $"{fontDir}{font.Name}.ttf" : font.Path;
       if (!File.Exists(path)) {
         try {
+          GameFontFamily fontFamily = font.GetFontFamily();
+          if (fontFamily == GameFontFamily.Undefined) {
+            continue;
+          }
           IFontHandle fontHandle = Svc.PluginInterface.UiBuilder.FontAtlas.NewGameFontHandle(new GameFontStyle {
-            FamilyAndSize = GameFontStyle.GetRecommendedFamilyAndSize(font.GetFontFamily(), font.Size),
+            FamilyAndSize = GameFontStyle.GetRecommendedFamilyAndSize(fontFamily, font.Size),
+            SizePt = font.Size,
           });
           _imGuiFonts.Add(GetFontKey(font), fontHandle);
         } catch (Exception ex) {
-          Svc.Log.Error(ex, $"Failed to load font from path [{path}]!");
+          Svc.Log.Error(ex, $"Failed to load font with name [{font.Name}]!");
         }
       } else {
         try {

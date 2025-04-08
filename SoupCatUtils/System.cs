@@ -12,13 +12,13 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils;
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 public static class System {
   internal static void Init() {
-    System.Modules = [
+    Modules = [
       new Housing(),
       new FontContainer(),
       new States(),
       new FanDance4Module(),
     ];
-    System.UI = new();
+    UI = new();
   }
   /// <summary>
   /// The instance object of this plugin.

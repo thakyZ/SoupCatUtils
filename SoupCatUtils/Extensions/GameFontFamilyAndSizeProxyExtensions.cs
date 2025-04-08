@@ -47,7 +47,7 @@ internal static class GameFontFamilyAndSizeProxyExtensions {
   public static GameFontFamily GameFontFamilyUnProxy(this string @string) {
     string[]         names = Enum.GetNames(typeof(GameFontFamily));
     GameFontFamily[] values = Enum.GetValues<GameFontFamily>();
-    return (GameFontFamily)(values.GetValue(names.IndexOf(x => x.Equals(@string, StringComparison.OrdinalIgnoreCase))) ?? GameFontFamily.Axis);
+    return values.FirstOrNull(x => x.ToString().Equals(@string, StringComparison.OrdinalIgnoreCase)) ?? GameFontFamily.Undefined;
   }
 
   /// <summary>
