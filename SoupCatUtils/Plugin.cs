@@ -14,7 +14,7 @@ using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Lumina.Excel.Sheets;
 
 using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Configuration;
-
+using Serilog;
 using static Dalamud.Interface.Utility.Raii.ImRaii;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils;
@@ -42,7 +42,7 @@ public class Plugin : IDalamudPlugin {
   /// <summary>
   /// The plugin's main command name.
   /// </summary>
-  private const string CommandName = "/soupcat";
+  private const string _COMMAND_NAME = "/soupcat";
 
   public Plugin(IDalamudPluginInterface pluginInterface) {
     System.PluginInstance = this;
@@ -54,15 +54,12 @@ public class Plugin : IDalamudPlugin {
 
     System.PluginConfig.PropertyChanged += PluginConfig_PropertyChanged;
 
-    if (System.PluginConfig.EnableUseBestPotionCommand) {
-      Svc.Log.Information($"AddHandler (ctor) {nameof(BestPotionCommand)}");
-      Svc.Commands.AddHandler("/bpotion", new CommandInfo(BestPotionCommand));
-    }
+    this.PluginConfig_PropertyChanged(null, new PropertyChangedEventArgs(nameof(Config.EnableUseBestPotionCommand)));
 
     System.WindowSystem.AddWindow(System.UI);
 
-    Svc.Commands.AddHandler(CommandName, new CommandInfo(OnCommand) {
-      HelpMessage = "The soup cat utilities command",
+    Svc.Commands.AddHandler(_COMMAND_NAME, new CommandInfo(OnCommand) {
+      HelpMessage = "The command soup cat utilities window",
       ShowInHelp = true
     });
 
@@ -75,7 +72,7 @@ public class Plugin : IDalamudPlugin {
       if (System.PluginConfig.EnableUseBestPotionCommand) {
         Svc.Log.Information($"AddHandler {nameof(BestPotionCommand)}");
         Svc.Commands.AddHandler("/bpotion", new CommandInfo(BestPotionCommand));
-      } else {
+      } else if (Svc.Commands.Commands.Keys.Any((string command) => command.Equals("/bpotion"))) {
         Svc.Log.Information($"RemoveHandler {nameof(BestPotionCommand)}");
         Svc.Commands.RemoveHandler("/bpotion");
       }
@@ -83,7 +80,7 @@ public class Plugin : IDalamudPlugin {
   }
 
   // private static IEnumerable<string>? _potionNamesIds;
-  private static IEnumerable<uint> _potionIds = [
+  private static readonly IEnumerable<uint> _potionIds = [
     4_551,  // Potion
     4_552,  // Hi-Potion
     4_553,  // Mega-Potion
@@ -92,7 +89,6 @@ public class Plugin : IDalamudPlugin {
     23_167, // Super-Potion
     38_956, // Hyper-Potion
   ];
-  private uint _retryItem = 0;
 
   private void BestPotionCommand(string command, string arguments) {
     Svc.Log.Information($"Ran {nameof(BestPotionCommand)}");
@@ -102,36 +98,28 @@ public class Plugin : IDalamudPlugin {
         var manager = InventoryManager.Instance();
         // ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (manager == null) {
+          Log.Warning("InventoryManager was found to be null");
           return;
         }
-        for (int i = 0; i < 4; i++) {
-          var inventoryType = i switch {
-            1 => InventoryType.Inventory2,
-            2 => InventoryType.Inventory3,
-            3 => InventoryType.Inventory4,
-            _ => InventoryType.Inventory1,
-          };
-          var container = manager->GetInventoryContainer(inventoryType);
-          if (container == null || container->IsLoaded) {
-            continue;
+        foreach (var potionId in _potionIds) {
+          if (manager->GetInventoryItemCount(potionId, false, false, false) != 0) {
+            items.Add(potionId);
           }
-          for (uint j = 0; j < container->Size; j++) {
-            var item = &container->Items[j];
-            uint itemId = item->ItemId;
-            if (_potionIds?.Contains(itemId) == true) {
-              var flags = item->Flags;
-              if ((flags & InventoryItem.ItemFlags.HighQuality) != 0) {
-                items.Add(itemId + 1_000_000);
-              } else {
-                items.Add(itemId);
-              }
-            }
+          if (manager->GetInventoryItemCount(potionId, true, false, false) != 0) {
+            items.Add(potionId + 1_000_000);
           }
         }
+        Log.Warning($"items.Count = {items.Count}");
+
         items.Sort((a, b) => (a > 1_000_000 ? a - 1_000_000 : a).CompareTo(b > 1_000_000 ? b - 1_000_000 : b));
 
         var agentInventoryContext = AgentInventoryContext.Instance();
         if (agentInventoryContext == null) {
+          Log.Warning("InventoryContext instance was found to be null.");
+          return;
+        }
+        if (items.Count == 0) {
+          Svc.Log.Warning("No items found or issue");
           return;
         }
         uint id = items[^1];
@@ -148,15 +136,15 @@ public class Plugin : IDalamudPlugin {
     System.WindowSystem.RemoveAllWindows();
     Svc.PluginInterface.UiBuilder.Draw -= DrawUI;
     Svc.PluginInterface.UiBuilder.OpenConfigUi -= DrawConfigUI;
-    Svc.Commands.RemoveHandler(CommandName);
+    Svc.Commands.RemoveHandler(_COMMAND_NAME);
     try {
-      if (System.PluginConfig.EnableUseBestPotionCommand) {
-        Svc.Log.Information($"RemoveHandler (dispose (if)) {nameof(BestPotionCommand)}");
-        Svc.Commands.RemoveHandler("bpotion");
+      if (Svc.Commands.Commands.Keys.Any((string command) => command.Equals("/bpotion"))) {
+        Svc.Log.Information($"RemoveHandler {nameof(BestPotionCommand)}");
+        Svc.Commands.RemoveHandler("/bpotion");
       }
-      Svc.Log.Information($"RemoveHandler (dispose) {nameof(BestPotionCommand)}");
-      Svc.Commands.RemoveHandler("bpotion");
-    } catch { /* Ignore */}
+    } catch {
+      // Do nothing...
+    }
     System.Modules.Dispose();
     System.UI.Dispose();
     ECommonsMain.Dispose();

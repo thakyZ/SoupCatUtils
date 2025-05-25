@@ -1,4 +1,4 @@
-﻿<Project Sdk="Dalamud.NET.Sdk/12.0.0">
+﻿<Project Sdk="Dalamud.NET.Sdk/12.0.2">
   <PropertyGroup>
     <Authors>Neko Boi Nick</Authors>
     <Description>
@@ -7,38 +7,27 @@
       island sanctuary minions from being spawned.
     </Description>
     <PackageProjectUrl>https://github.com/thakyZ/SoupCatUtils</PackageProjectUrl>
-    <Copyright></Copyright>
     <RootNamespace>NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils</RootNamespace>
     <Title>Soup Cat Utils</Title>
     <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
   <PropertyGroup Label="Target">
-    <TargetFramework>net9.0-windows</TargetFramework>
-    <PlatformTarget>x64</PlatformTarget>
-    <Platforms>$(PlatformTarget)</Platforms>
-    <Configurations>Release;Debug</Configurations>
-    <Nullable>enable</Nullable>
-    <LangVersion>latest</LangVersion>
     <GenerateDependencyFile>false</GenerateDependencyFile>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <Configurations>Debug;Release;ILRepackTest;PersonalRelease</Configurations>
+    <Configurations>$(Configurations);ILRepackTest;PersonalRelease</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Label="Build">
-    <OutputType>Library</OutputType>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <DebugType>embedded</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
 
   <PropertyGroup Label="Feature">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Version>1.0.0.4</Version>
   </PropertyGroup>
 
