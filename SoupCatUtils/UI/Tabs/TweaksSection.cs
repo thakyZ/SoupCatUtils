@@ -1,8 +1,12 @@
+using Dalamud.Interface.Windowing;
+
 using ImGuiNET;
 
-namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
+namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI.Tabs;
 
 public class TweaksSection : SectionBase {
+  public TweaksSection(Window parent) : base(parent) { }
+
   internal override string Name => "Tweaks##SoupCatUtils";
 
   public override void Draw() {

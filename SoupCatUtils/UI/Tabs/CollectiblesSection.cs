@@ -10,10 +10,13 @@ using ImGuiNET;
 using Newtonsoft.Json;
 
 using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Exceptions;
+using Dalamud.Interface.Windowing;
 
-namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
+namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI.Tabs;
 
 public class CollectiblesSection : SectionBase {
+  public CollectiblesSection(Window parent) : base(parent) { }
+
   internal override string Name => "Collectibles##SoupCatUtils";
 
   internal enum WindowType {

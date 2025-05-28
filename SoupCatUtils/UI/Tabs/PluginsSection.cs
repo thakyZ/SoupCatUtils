@@ -8,6 +8,7 @@ using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Style;
 using Dalamud.Interface.Utility;
+using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 
 using ECommons.ImGuiMethods;
@@ -16,13 +17,13 @@ using ImGuiNET;
 
 using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Extensions.ImGui;
 
-namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
+namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI.Tabs;
 internal class PluginsSection : SectionBase {
   internal override string Name => $"Plugins##{nameof(SoupCatUtils)}";
   private Dictionary<IExposedPlugin, IExposedPlugin> PluginDevMap { get; } = [];
   private bool hideUpToDatePlugins = false;
 
-  public PluginsSection() : base() {
+  public PluginsSection(Window parent) : base(parent) {
     Svc.PluginInterface.ActivePluginsChanged += this.ActivePluginsChanged;
     this.ActivePluginsChanged(PluginListInvalidationKind.Update, false);
   }
@@ -46,9 +47,9 @@ internal class PluginsSection : SectionBase {
 
   public override void Draw() {
     base.Draw();
+
     try {
-      //this.DrawFilterCheckBox();
-      if (ImGui.BeginChild("##", ImGui.GetWindowSize(), false, ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoDecoration)) {
+      if (ImGui.BeginChild("##", ImGui.GetWindowContentRegionMax(), false, ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoDecoration)) {
         if (ImGui.BeginTable($"##Plugins-ScrollingArea-{nameof(SoupCatUtils)}", 4, ImGuiTableFlags.ScrollY)) {
           ImGui.TableSetupScrollFreeze(4, 1);
           ImGui.TableSetupColumn("Remote Plugin", ImGuiTableColumnFlags.WidthStretch, 150.0f);
@@ -56,19 +57,23 @@ internal class PluginsSection : SectionBase {
           ImGui.TableSetupColumn("Local Plugin", ImGuiTableColumnFlags.WidthStretch, 150.0f);
           ImGui.TableSetupColumn("Local Plugin Version", ImGuiTableColumnFlags.WidthStretch, 100.0f);
           ImGui.TableHeadersRow();
+
           foreach ((IExposedPlugin? nonDev, IExposedPlugin? dev) in this.PluginDevMap) {
             try {
               ImGui.TableNextColumn();
               ImGui.Text(nonDev?.Name.ToString("Unknown Remote Plugin"));
               ImGui.TableNextColumn();
               var remoteVersionComp = VersionCompare(nonDev?.Version, dev?.Version, -1);
+
               using (var remoteVersion = ImGuiRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudRed, remoteVersionComp)) {
                 ImGui.Text(nonDev?.Version?.ToString() ?? "null");
               }
+
               ImGui.TableNextColumn();
               ImGui.Text(dev?.Name.ToString("Unknown Local Plugin"));
               ImGui.TableNextColumn();
               var localVersionComp = VersionCompare(dev?.Version, nonDev?.Version, -1);
+
               using (var localVersion = ImGuiRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudRed, localVersionComp)) {
                 ImGui.Text(dev?.Version?.ToString() ?? "null");
               }
@@ -76,8 +81,10 @@ internal class PluginsSection : SectionBase {
               Svc.Log.Error(exception, "Failed when making row in plugins table.");
             }
           }
+
           ImGui.EndTable();
         }
+
         ImGui.EndChild();
       }
     } catch (Exception exception) {
@@ -102,7 +109,7 @@ internal class PluginsSection : SectionBase {
     return major == direction || minor == direction || build == direction || revision == direction;
 
     static int InternalCompare(int f, int s) {
-      if ((f == 0 && s == -1) || (f == -1 && s == 0)) {
+      if (f == 0 && s == -1 || f == -1 && s == 0) {
         return 0;
       }
       return f.CompareTo(s);

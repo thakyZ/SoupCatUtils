@@ -1,14 +1,17 @@
 using System.Numerics;
+
+using Dalamud.Interface.Windowing;
+
 using ImGuiNET;
+
 using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Modules;
 
-namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
+namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI.Tabs;
 
 public class SquidSection : SectionBase {
   internal override string Name => "SPL##SoupCatUtils";
 
-  public SquidSection() {
-  }
+  public SquidSection(Window parent) : base(parent) { }
 
   public override void Dispose() {
     GC.SuppressFinalize(this);

@@ -1,11 +1,15 @@
+using System;
 using System.Reflection;
 using System.Resources;
 
 using Dalamud.Interface.Windowing;
 
-using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Modules;
 using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Configuration;
+using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.Modules;
 using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
+using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI.Tabs;
+
+using Newtonsoft.Json.Linq;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils;
 
@@ -49,25 +53,40 @@ public static class System {
   /// </summary>
   internal static WindowSystem WindowSystem { get; } = new(Plugin.Name.Replace(" ",string.Empty));
 
-  internal static List<SectionBase> GenerateSectionBases() {
-    List<SectionBase> output = [];
+  internal static IEnumerable<SectionBase> GenerateSectionBases(Window container) {
+    var assembly = Assembly.GetExecutingAssembly();
+    Type[]? assemblyTypes = [];
+
     try {
-      var assembly = Assembly.GetExecutingAssembly();
-      foreach (var sectionBaseType in assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(SectionBase)))) {
-        var constrcutor = sectionBaseType.GetConstructor([]);
-        if (constrcutor is null) {
-          Svc.Log.Warning("Constructor of type {0} doesn't have a parameterless constructor.", sectionBaseType.Name);
-          continue;
-        }
-        if (constrcutor.Invoke([]) is not SectionBase sectionBase) {
-          Svc.Log.Warning("Failed to construct type of {0}.", sectionBaseType.Name);
-          continue;
-        }
-        output.Add(sectionBase);
-      }
+      assemblyTypes = assembly.GetTypes();
     } catch (Exception exception) {
-      Svc.Log.Error(exception, "Failed to create section bases.");
+      Svc.Log.Error(exception, "Failed to get types in the assembly.");
     }
-    return output;
+
+    foreach (var sectionBaseType in assemblyTypes.Where(t => t.IsSubclassOf(typeof(SectionBase)))) {
+      var constrcutor = sectionBaseType.GetConstructor([typeof(Window)]);
+
+      if (constrcutor is null) {
+        Svc.Log.Warning("Constructor of type {0} doesn't have a parameterless constructor.", sectionBaseType.Name);
+        continue;
+      }
+
+      if (TryGetConstructorOutput(constrcutor, container) is not SectionBase sectionBase) {
+        Svc.Log.Warning("Failed to construct type of {0}.", sectionBaseType.Name);
+        continue;
+      }
+
+      yield return sectionBase;
+    }
+
+    object? TryGetConstructorOutput(ConstructorInfo constrcutor, params object[] args) {
+      try {
+        return constrcutor.Invoke(args);
+      } catch (Exception exception) {
+        Svc.Log.Error(exception, "Failed to get types in the assembly.");
+      }
+
+      return null;
+    }
   }
 }

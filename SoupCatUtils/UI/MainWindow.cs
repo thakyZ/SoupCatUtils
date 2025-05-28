@@ -1,10 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Windowing;
-
 using FFXIVClientStructs.FFXIV.Common.Math;
-
 using ImGuiNET;
+using NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI.Tabs;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.SoupCatUtils.UI;
 
@@ -13,11 +12,12 @@ public class MainWindow : Window, IDisposable {
   private static ImGuiWindowFlags WindowFlags { get => ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse; }
   public static string Name { get => $"{Plugin.Name} Settings"; }
 
-  private List<SectionBase> Sections { get; } = System.GenerateSectionBases();
+  private IEnumerable<SectionBase> Sections { get; }
 
   public MainWindow() : base(Name, WindowFlags) {
     Size = new Vector2(630, 500) * ImGuiHelpers.GlobalScale;
     SizeCondition = ImGuiCond.Always;
+    this.Sections = System.GenerateSectionBases(this);
   }
 
   public override void OnClose() {
@@ -26,9 +26,10 @@ public class MainWindow : Window, IDisposable {
   }
 
   public void Dispose() {
-    foreach (SectionBase section in Sections) {
+    foreach (SectionBase section in this.Sections) {
       section.Dispose();
     }
+
     GC.SuppressFinalize(this);
   }
 
